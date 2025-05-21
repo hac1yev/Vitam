@@ -15,7 +15,7 @@ const Dashboard = () => {
         <div className="main">
           <Navbar />
           <Outlet />
-          <footer className="footer">
+          {/* <footer className="footer">
             <div className="container-fluid">
               <div className="row text-muted">
                 <div className="col-8 text-start">
@@ -52,7 +52,7 @@ const Dashboard = () => {
                 </div>
               </div>
             </div>
-          </footer>
+          </footer> */}
         </div>
       </div>
     </>

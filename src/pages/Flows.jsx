@@ -3,7 +3,7 @@ import StartedFlowsTable from "../components/Tables/StartedFlowsTable";
 
 const Flows = () => {
     return (
-        <main className="content">
+        <main className="content px-4">
             <BreadcrumbNav />
             <StartedFlowsTable />
         </main>

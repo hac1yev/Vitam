@@ -3,7 +3,7 @@ import WorksonmeTable from "../components/Tables/WorksonmeTable";
 
 const Home = () => {
     return (
-        <main className="content">
+        <main className="content px-4">
             <BreadcrumbNav />
             <WorksonmeTable />
         </main>

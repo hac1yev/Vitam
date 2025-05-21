@@ -16,9 +16,9 @@ export default function StartedFlowsTable() {
   return (
     <div style={{ height: 600, width: '100%' }}>
       <div className='d-flex justify-content-end align-items-center my-3 w-100'>
-        <Link to="/flows/" className='start-flow-button d-flex align-items-center btn btn-primary gap-1'>
-            <Play width={16} color='#fff' />
-            Başlat
+        <Link to="/flows/start" className='start-flow-button d-flex align-items-center btn btn-primary gap-1'>
+          <Play width={16} color='#fff' />
+          Başlat
         </Link>
       </div>
       <DataGrid className='worksonme-table' {...data} loading={loading} showToolbar />
