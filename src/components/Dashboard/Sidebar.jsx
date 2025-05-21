@@ -1,7 +1,15 @@
-import { House, MessageSquareWarning, Network, Settings } from "lucide-react";
+import { House, Wrench } from "lucide-react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
+import { sidebarMenuLinks } from "../../demo/sidebarLinks";
 
 const Sidebar = () => {
+    const [openDropdown,setOpenDropdown] = useState({
+      flows: false,
+      reports: false,
+      management: false
+    });
+
     return (
         <nav id="sidebar" className="sidebar">
           <Link className="sidebar-brand" to={'/'}>
@@ -19,183 +27,37 @@ const Sidebar = () => {
                   <span className="align-middle">Ana Sayfa</span>
                 </Link>
               </li>
-              <li className="sidebar-item">
-                <div
-                  to='/flows'
-                  data-bs-target="#pages"
-                  data-bs-toggle="collapse"
-                  className="sidebar-link collapsed"
-                >
-                  <Network width={18} />
-                  <span className="align-middle">Akışlar</span>
-                </div>
-                <ul
-                  id="pages"
-                  className="sidebar-dropdown list-unstyled collapse "
-                  data-bs-parent="#sidebar"
-                >
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-settings.html">
-                      Settings
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-clients.html">
-                      Clients{" "}
-                      <span className="sidebar-badge badge rounded-pill bg-primary">
-                        New
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-invoice.html">
-                      Invoice
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-pricing.html">
-                      Pricing
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-tasks.html">
-                      Tasks
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-chat.html">
-                      Chat{" "}
-                      <span className="sidebar-badge badge rounded-pill bg-primary">
-                        New
-                      </span>
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-blank.html">
-                      Blank Page
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li className="sidebar-item">
-                <Link
-                  to={"/reports"}
-                  data-bs-target="#auth"
-                  data-bs-toggle="collapse"
-                  className="sidebar-link collapsed"
-                >
-                  <MessageSquareWarning width={18} />
-                  <span className="align-middle">Raporlar</span>
-                </Link>
-                <ul
-                  id="auth"
-                  className="sidebar-dropdown list-unstyled collapse "
-                  data-bs-parent="#sidebar"
-                >
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-sign-in.html">
-                      Sign In
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-sign-up.html">
-                      Sign Up
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a
-                      className="sidebar-link"
-                      href="pages-reset-password.html"
-                    >
-                      Reset Password
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-404.html">
-                      404 Page
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="pages-500.html">
-                      500 Page
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
-              <li className="sidebar-item">
-                <Link
-                  to={"/management"}
-                  data-bs-target="#ui"
-                  data-bs-toggle="collapse"
-                  className="sidebar-link collapsed"
-                >
-                  <Settings width={18} />
-                  <span className="align-middle">Yönetici İşlemleri</span>
-                </Link>
-                <ul
-                  id="ui"
-                  className="sidebar-dropdown list-unstyled collapse "
-                  data-bs-parent="#sidebar"
-                >
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-alerts.html">
-                      Alerts
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-buttons.html">
-                      Buttons
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-cards.html">
-                      Cards
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-general.html">
-                      General
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-grid.html">
-                      Grid
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-modals.html">
-                      Modals
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-offcanvas.html">
-                      Offcanvas
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-placeholders.html">
-                      Placeholders
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-notifications.html">
-                      Notifications
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-tabs.html">
-                      Tabs
-                    </a>
-                  </li>
-                  <li className="sidebar-item">
-                    <a className="sidebar-link" href="ui-typography.html">
-                      Typography
-                    </a>
-                  </li>
-                </ul>
-              </li>
-
+              {sidebarMenuLinks.map((link) => (
+                <li className="sidebar-item" key={link.id}>
+                  <div
+                    onClick={() => setOpenDropdown((prev) => {
+                      return {
+                        ...prev,
+                        [link.id]: !prev[link.id]
+                      }
+                    })}
+                    data-bs-toggle="collapse"
+                    className={openDropdown[link.id] ? "sidebar-link" : "sidebar-link collapsed"}
+                  >
+                    <link.icon width={18} />
+                    <span className="align-middle">{link.title}</span>
+                  </div>
+                  {openDropdown[link.id] && <ul
+                    id="pages"
+                    className="sidebar-dropdown list-unstyled"
+                    data-bs-parent="#sidebar"
+                  >
+                    {link.children?.map((child, index) => (
+                      <li className="sidebar-item" key={index}>
+                        <Link to={child.to} className="sidebar-link">
+                          <child.icon width={16} />
+                          <span className="align-middle">{child.label}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>}
+                </li>
+              ))}
             </ul>
           </div>
         </nav>
