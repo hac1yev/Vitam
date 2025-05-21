@@ -1,3 +1,5 @@
+import { Outlet } from "react-router-dom";
+import Home from "../../pages/Home";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
 
@@ -50,6 +52,7 @@ const Dashboard = () => {
               </div>
             </div>
           </footer>
+          <Outlet />
         </div>
       </div>
     </>

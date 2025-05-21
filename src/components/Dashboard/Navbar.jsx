@@ -95,7 +95,7 @@ const Navbar = () => {
               data-bs-toggle="dropdown"
             >
                 <CircleUser color="white" />
-                Huseyn Alizade
+                Ilkin Haciyev
                 <ChevronDown width={16} />
             </Link>
             {/* <div
