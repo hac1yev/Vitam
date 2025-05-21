@@ -2,7 +2,7 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./components/Dashboard/Dashboard";
 import Home from "./pages/Home";
-import { useState } from "react";
+import Flows from "./pages/Flows";
 
 function App() {
   const token = true;
@@ -14,6 +14,7 @@ function App() {
           <>
             <Route element={<Dashboard/>}>
               <Route path="/" element={<Home />} />
+              <Route path="/flows" element={<Flows />} />
             </Route>
             <Route
               path="/login"
