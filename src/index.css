@@ -7,3 +7,23 @@
 .worksonme-table .MuiTablePagination-root div p {
   margin-bottom: 0;
 }
+
+.start-flow-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 130px;
+  height: 40px;
+}
+
+.start-flow-button a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.start-flow-button:hover a {
+  display: inline-block;
+  color: #fff;
+  text-decoration: none;
+  height: 100%;
+}

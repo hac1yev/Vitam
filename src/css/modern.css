@@ -13653,7 +13653,7 @@ pre.snippet {
 .wrapper:before {
   background: #153d77;
   content: " ";
-  height: 264px;
+  height: 200px;
   left: 0;
   position: absolute;
   top: 0;

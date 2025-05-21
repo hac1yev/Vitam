@@ -14,6 +14,7 @@ const Dashboard = () => {
         <Sidebar />
         <div className="main">
           <Navbar />
+          <Outlet />
           <footer className="footer">
             <div className="container-fluid">
               <div className="row text-muted">
@@ -52,7 +53,6 @@ const Dashboard = () => {
               </div>
             </div>
           </footer>
-          <Outlet />
         </div>
       </div>
     </>

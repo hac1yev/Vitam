@@ -48,7 +48,12 @@ const Sidebar = () => {
                     data-bs-parent="#sidebar"
                   >
                     {link.children?.map((child, index) => (
-                      <li className="sidebar-item" key={index}>
+                      <li className="sidebar-item" key={index} onClick={() => setOpenDropdown((prev) => {
+                        return {
+                          ...prev,
+                          [link.id]: false
+                        }
+                      })}>
                         <Link to={child.to} className="sidebar-link">
                           <child.icon width={16} />
                           <span className="align-middle">{child.label}</span>

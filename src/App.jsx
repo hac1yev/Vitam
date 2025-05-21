@@ -6,7 +6,6 @@ import Flows from "./pages/Flows";
 
 function App() {
   const token = true;
-
   return (
     <>
       <Routes>
