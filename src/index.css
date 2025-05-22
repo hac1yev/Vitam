@@ -27,3 +27,19 @@
   text-decoration: none;
   height: 100%;
 }
+
+.error-text {
+  color: rgb(253, 57, 57);
+  font-weight: 600;
+  margin-bottom: 0;
+}
+
+.error-border {
+  border: 1px solid #fd3939!important;
+  box-shadow: 0 0 0 1px rgb(248, 179, 179)!important;
+  border-radius: 5px;
+}
+
+.error-border .select__control {
+  border: none!important;
+}

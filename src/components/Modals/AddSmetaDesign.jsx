@@ -25,6 +25,7 @@ export default function AddSmetaDesign({ handleClose, open }) {
       >
         <Box sx={style}>
           <form className="row">
+            <h3 className='mb-4'>Smeta dizayn əlavə et</h3>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
               <label htmlFor="olcuVahidi">Fayl linki*</label>
               <input
@@ -57,7 +58,7 @@ export default function AddSmetaDesign({ handleClose, open }) {
                 // })}
               />
             </div>
-            <div className="d-flex justify-content-end gap-2">
+            <div className="d-flex justify-content-end gap-2 mt-2">
               <button className="btn btn-primary">Əlavə et</button>
               <button
                 type="button"
