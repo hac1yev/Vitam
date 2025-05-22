@@ -4,6 +4,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Home from "./pages/Home";
 import Flows from "./pages/Flows";
 import AddSolutionForm from "./components/Forms/AddSolutionForm";
+import StepperForm from "./components/Forms/StepperForm";
 
 function App() {
   const token = true;
@@ -15,7 +16,7 @@ function App() {
             <Route element={<Dashboard/>}>
               <Route path="/" element={<Home />} />
               <Route path="/flows" element={<Flows />} />
-              <Route path="/flows/start" element={<AddSolutionForm />} />
+              <Route path="/flows/start" element={<StepperForm />} />
             </Route>
             <Route
               path="/login"
