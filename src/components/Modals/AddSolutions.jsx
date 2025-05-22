@@ -43,7 +43,7 @@ export default function AddSolution({ handleClose, open }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form className="row" onSubmit={handleSubmit(handleSolutionModalSubmit)}>
+          <div className="row">
             <h3 className="mb-4">Həlləri əlavə et</h3>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
               <label htmlFor="hell">Həll adı*</label>
@@ -138,7 +138,7 @@ export default function AddSolution({ handleClose, open }) {
               />
             </div>
             <div className="d-flex justify-content-end gap-2 mt-2">
-              <button className="btn btn-primary">Əlavə et</button>
+              <button className="btn btn-primary" onClick={handleSubmit(handleSolutionModalSubmit)}>Əlavə et</button>
               <button
                 type="button"
                 onClick={handleClose}
@@ -148,7 +148,7 @@ export default function AddSolution({ handleClose, open }) {
                 Ləğv et
               </button>
             </div>
-          </form>
+          </div>
         </Box>
       </Modal>
     </div>

@@ -1,5 +1,6 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
+import { useForm } from "react-hook-form";
 
 const style = {
   position: "absolute",
@@ -15,6 +16,12 @@ const style = {
 };
 
 export default function AddSmetaDesign({ handleClose, open }) {
+  const { register, handleSubmit, formState: { errors } } = useForm();
+
+  const handleSmetaDesignModalSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
     <div>
       <Modal
@@ -24,42 +31,41 @@ export default function AddSmetaDesign({ handleClose, open }) {
         aria-describedby="modal-modal-description"
       >
         <Box sx={style}>
-          <form className="row">
-            <h3 className='mb-4'>Smeta dizayn əlavə et</h3>
+          <div className="row">
+            <h3 className="mb-4">Smeta dizayn əlavə et</h3>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="olcuVahidi">Fayl linki*</label>
+              <label htmlFor="fileUrl">Fayl linki*</label>
               <input
                 type="url"
-                className="form-control"
+                className={errors.fileUrl ? "form-control error-border" : "form-control"}
                 id="fileUrl"
-                //   value={"S-AZ-101438"}
-                // value={productItems.title}
-                // onChange={(e) => setProductItems((prev) => {
-                //     return {
-                //         ...prev,
-                //         title: e.target.value
-                //     }
-                // })}
+                name="fileUrl"
+                {...register("fileUrl", { required: "Fayl linki boş ola bilməz" })}
               />
+              {errors.fileUrl && (
+                <p className="error-text">{errors.fileUrl.message}</p>
+              )}
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="miqdar">Fayl başlığı*</label>
+              <label htmlFor="fileTitle">Fayl başlığı*</label>
               <input
                 type="text"
-                className="form-control"
+                className={errors.fileTitle ? "form-control error-border" : "form-control"}
                 id="fileTitle"
-                //   value={"S-AZ-101438"}
-                // value={productItems.title}
-                // onChange={(e) => setProductItems((prev) => {
-                //     return {
-                //         ...prev,
-                //         title: e.target.value
-                //     }
-                // })}
+                name="fileTitle"
+                {...register("fileTitle", { required: 'Fayl başlığı boş ola bilməz' })}
               />
+              {errors.fileTitle && (
+                <p className="error-text">{errors.fileTitle.message}</p>
+              )}
             </div>
             <div className="d-flex justify-content-end gap-2 mt-2">
-              <button className="btn btn-primary">Əlavə et</button>
+              <button
+                className="btn btn-primary"
+                onClick={handleSubmit(handleSmetaDesignModalSubmit)}
+              >
+                Əlavə et
+              </button>
               <button
                 type="button"
                 onClick={handleClose}
@@ -69,7 +75,7 @@ export default function AddSmetaDesign({ handleClose, open }) {
                 Ləğv et
               </button>
             </div>
-          </form>
+          </div>
         </Box>
       </Modal>
     </div>
