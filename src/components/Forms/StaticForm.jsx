@@ -10,7 +10,8 @@ const StaticForm = ({ setActiveStep }) => {
   const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
   const handleOpenSolutionModal = () => setOpenSolutionModal(true);
   const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
-  const { register, handleSubmit, control, formState: { errors } } = useForm();
+  const { register, handleSubmit, control, watch, formState: { errors } } = useForm();
+  const tarix = watch('tarix');
 
   const handleCloseSolutionModal = useCallback(() => {
     setOpenSolutionModal(false);
@@ -27,7 +28,7 @@ const StaticForm = ({ setActiveStep }) => {
   ];
 
   const onSubmit = (data) => {
-    console.log(data);    
+    console.log(data);
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -50,13 +51,6 @@ const StaticForm = ({ setActiveStep }) => {
             readOnly
             value={"S-AZ-101438"}
             {...register("sorguNomresi")}
-            // value={productItems.title}
-            // onChange={(e) => setProductItems((prev) => {
-            //     return {
-            //         ...prev,
-            //         title: e.target.value
-            //     }
-            // })}
           />
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
@@ -64,16 +58,10 @@ const StaticForm = ({ setActiveStep }) => {
           <input
             type="date"
             className="form-control"
+            defaultValue={new Date().toISOString().split("T")[0]}
             name="tarix"
             id="tarix"
             {...register("tarix")}
-            // value={productItems.life}
-            // onChange={(e) => setProductItems((prev) => {
-            //     return {
-            //         ...prev,
-            //         life: e.target.value
-            //     }
-            // })}
           />
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
@@ -87,7 +75,11 @@ const StaticForm = ({ setActiveStep }) => {
                 {...field}
                 options={options}
                 placeholder="Select type:"
-                className={errors.musteriAdi ? "basic-multi-select error-border" : "basic-multi-select"}
+                className={
+                  errors.musteriAdi
+                    ? "basic-multi-select error-border"
+                    : "basic-multi-select"
+                }
                 classNamePrefix="select"
                 onChange={(selectedOption) => field.onChange(selectedOption)}
               />
@@ -103,17 +95,18 @@ const StaticForm = ({ setActiveStep }) => {
             type="date"
             id="icraTarixi"
             name="icraTarixi"
-            className={errors.icraTarixi ? "form-control error-border" : "form-control"}
+            className={
+              errors.icraTarixi ? "form-control error-border" : "form-control"
+            }
             {...register("icraTarixi", {
               required: "İcra tarixi boş ola bilməz!",
+              validate: (value) => {
+                if (!tarix) return true; // if tarix is empty, skip comparison
+                return (
+                  value >= tarix || "İcra tarixi, tarixdən kiçik ola bilməz!"
+                );
+              },
             })}
-            // value={productItems.life}
-            // onChange={(e) => setProductItems((prev) => {
-            //     return {
-            //         ...prev,
-            //         life: e.target.value
-            //     }
-            // })}
           />
           {errors.icraTarixi && (
             <p className="error-text">{errors.icraTarixi.message}</p>
@@ -130,7 +123,11 @@ const StaticForm = ({ setActiveStep }) => {
                 {...field}
                 options={options}
                 placeholder="Select type:"
-                className={errors.layiheAdi ? "basic-multi-select error-border" : "basic-multi-select"}
+                className={
+                  errors.layiheAdi
+                    ? "basic-multi-select error-border"
+                    : "basic-multi-select"
+                }
                 classNamePrefix="select"
                 onChange={(selectedOption) => field.onChange(selectedOption)}
               />
@@ -151,7 +148,11 @@ const StaticForm = ({ setActiveStep }) => {
                 {...field}
                 options={options}
                 placeholder="Select type:"
-                className={errors.musteriNovu ? "basic-multi-select error-border" : "basic-multi-select"}
+                className={
+                  errors.musteriNovu
+                    ? "basic-multi-select error-border"
+                    : "basic-multi-select"
+                }
                 classNamePrefix="select"
                 onChange={(selectedOption) => field.onChange(selectedOption)}
               />
@@ -173,7 +174,11 @@ const StaticForm = ({ setActiveStep }) => {
                 {...field}
                 options={options}
                 placeholder="Select type:"
-                className={errors.layiheMeneceri ? "basic-multi-select error-border" : "basic-multi-select"}
+                className={
+                  errors.layiheMeneceri
+                    ? "basic-multi-select error-border"
+                    : "basic-multi-select"
+                }
                 classNamePrefix="select"
                 onChange={(selectedOption) => field.onChange(selectedOption)}
               />
@@ -244,14 +249,6 @@ const StaticForm = ({ setActiveStep }) => {
             id="qeyd"
             name="qeyd"
             {...register("qeyd")}
-            //   value={"S-AZ-101438"}
-            // value={productItems.title}
-            // onChange={(e) => setProductItems((prev) => {
-            //     return {
-            //         ...prev,
-            //         title: e.target.value
-            //     }
-            // })}
           />
         </div>
         <div className="col-12 mb-3">
