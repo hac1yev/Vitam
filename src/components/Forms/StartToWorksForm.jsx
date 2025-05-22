@@ -1,7 +1,11 @@
+import StaticForm from "./StaticForm";
 
-const StartToWorksForm = () => {
+const StartToWorksForm = ({ setActiveStep }) => {
     return (
-        <div>StartToWorksForm</div>
+        <StaticForm 
+            setActiveStep={setActiveStep}
+            step="start-to-work-form"
+        />
     );
 };
 

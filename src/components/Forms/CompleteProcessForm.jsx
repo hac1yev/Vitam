@@ -1,7 +1,11 @@
+import StaticForm from "./StaticForm";
 
-const CompleteProcessForm = () => {
+const CompleteProcessForm = ({ setActiveStep }) => {
     return (
-        <div>CompleteProcessForm</div>
+        <StaticForm 
+            setActiveStep={setActiveStep}
+            step="complete-process-form"
+        />
     );
 };
 

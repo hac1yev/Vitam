@@ -8,7 +8,10 @@ const AddSolutionForm = ({ setActiveStep }) => {
   }, []);
 
   return (
-    <StaticForm setActiveStep={setActiveStep} />
+    <StaticForm 
+      setActiveStep={setActiveStep} 
+      step="add-solution-form"
+    />
   );
 };
 

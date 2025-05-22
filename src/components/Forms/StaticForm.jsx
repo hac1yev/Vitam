@@ -1,25 +1,28 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import BreadcrumbNav from "../Breadcrumb/BreadcrumbNav";
 import Select from "react-select";
-import AddSolution from "../Modals/AddSolutions";
-import AddSmetaDesign from "../Modals/AddSmetaDesign";
 import { Controller, useForm } from "react-hook-form";
+import AddSolutionTable from "../Tables/AddSolutionTable";
+import AddSmetaDesignTable from "../Tables/AddSmetaDesignTable";
+import RevisionTable from "../Tables/RevisionTable";
 
-const StaticForm = ({ setActiveStep }) => {
+const StaticForm = ({ setActiveStep,step }) => {
   const [openSolutionModal, setOpenSolutionModal] = useState(false);
   const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
   const handleOpenSolutionModal = () => setOpenSolutionModal(true);
   const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    trigger,
-    formState: { errors },
-  } = useForm();
-  const tarix = watch("tarix");
+  const { register, handleSubmit, control, watch, trigger, clearErrors, getValues, formState: { errors } } = useForm();
+  const watchedFields = watch();
+
+  useEffect(() => {
+    Object.entries(errors).forEach(([fieldName, error]) => {
+      const value = watchedFields[fieldName];
+      if (value && !error?.message) {
+        clearErrors(fieldName);
+      }
+    });
+  }, [watchedFields, errors, clearErrors]);
 
   const handleCloseSolutionModal = useCallback(() => {
     setOpenSolutionModal(false);
@@ -40,12 +43,23 @@ const StaticForm = ({ setActiveStep }) => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
+  const handleAddSolutionClick = async () => {
+    setValidateStatusAndCancel(false);
+    clearErrors(["statusQeyd", "legvSebebi"]);
+    await trigger(["musteriAdi","icraTarixi","layiheAdi","musteriNovu","layiheMeneceri"]);
+  };
+
   const handleCancelClick = async () => {
     setValidateStatusAndCancel(true);
-    const valid = await trigger(["statusQeyd", "legvSebebi"]);
-    if (valid) {
-      console.log("These fields are valid!");
-    }
+
+    setTimeout(async () => {
+      clearErrors(["musteriAdi", "icraTarixi", "layiheAdi", "musteriNovu", "layiheMeneceri"]);
+      const valid = await trigger(["statusQeyd", "legvSebebi"]);
+
+      if (!valid) {
+        console.log("Ləğv səbəbi və status qeydi sahələri tələb olunur!");
+      }
+    }, 0);
   };
 
   return (
@@ -53,7 +67,14 @@ const StaticForm = ({ setActiveStep }) => {
       <BreadcrumbNav />
       <form className="row my-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="d-flex justify-content-end align-items-center gap-2 my-2">
-          <button className="btn btn-primary py-2">Həlləri əlavə et</button>
+          <button
+            type="submit"
+            className="btn btn-primary py-2"
+            onClick={handleAddSolutionClick}
+          >
+            Həlləri əlavə et
+          </button>
+
           <button
             type="button"
             className="btn btn-danger py-2"
@@ -122,11 +143,11 @@ const StaticForm = ({ setActiveStep }) => {
             {...register("icraTarixi", {
               required: "İcra tarixi boş ola bilməz!",
               validate: (value) => {
-                if (!tarix) return true; // if tarix is empty, skip comparison
-                return (
-                  value >= tarix || "İcra tarixi, tarixdən kiçik ola bilməz!"
-                );
-              },
+                const tarixValue = getValues("tarix");
+                if (!tarixValue) return true;
+                return value >= tarixValue || "İcra tarixi, tarixdən kiçik ola bilməz!";
+              }
+
             })}
           />
           {errors.icraTarixi && (
@@ -249,7 +270,7 @@ const StaticForm = ({ setActiveStep }) => {
             {...register("qeyd")}
           />
         </div>
-        <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
+        {validateStatusAndCancel && <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
           <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
           <input
             type="text"
@@ -259,25 +280,21 @@ const StaticForm = ({ setActiveStep }) => {
             id="statusQeyd"
             name="statusQeyd"
             {...register("statusQeyd", {
-              required: validateStatusAndCancel
-                ? "Sənəd üzrə status qeydi boş ola bilməz!"
-                : false,
+              required: "Sənəd üzrə status qeydi boş ola bilməz!"
             })}
           />
           {errors.statusQeyd && (
             <p className="error-text">{errors.statusQeyd.message}</p>
           )}
-        </div>
-        <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
+        </div>}
+        {validateStatusAndCancel && <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
           <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
           <Controller
             name="legvSebebi"
             id="legvSebebi"
             control={control}
             rules={{
-              required: validateStatusAndCancel
-                ? "Ləğv səbəbi boş ola bilməz!"
-                : false,
+              required: "Ləğv səbəbi boş ola bilməz!"
             }}
             render={({ field }) => (
               <Select
@@ -297,113 +314,18 @@ const StaticForm = ({ setActiveStep }) => {
           {errors.legvSebebi && (
             <p className="error-text">{errors.legvSebebi.message}</p>
           )}
-        </div>
-        <div className="col-12 mb-3">
-          <div className="card">
-            <div className="card-body">
-              <table
-                id="datatables-buttons"
-                className="table table-striped"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th>Reviziya nömrəsi</th>
-                    <th>Sorğu nömrəsi</th>
-                    <th>Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div className="col-12 mb-3">
-          <div className="card">
-            <div className="card-body">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleOpenSolutionModal}
-              >
-                Ekle
-              </button>
-              <AddSolution
-                handleClose={handleCloseSolutionModal}
-                open={openSolutionModal}
-              />
-              <table
-                id="datatables-buttons"
-                className="table table-striped"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th>Həll adı</th>
-                    <th>Bölgə</th>
-                    <th>Ölçü vahidi</th>
-                    <th>Miqdar</th>
-                    <th>Çatdırılma tarixi</th>
-                    <th>Qeyd</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                    <td>61</td>
-                    <td>2011/04/25</td>
-                    <td>$320,800</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div className="col-12 mb-3">
-          <div className="card">
-            <div className="card-body">
-              <button
-                type="button"
-                className="btn btn-primary"
-                onClick={handleOpenSmetaDesignModal}
-              >
-                Ekle
-              </button>
-              <AddSmetaDesign
-                handleClose={handleCloseSmetaDesignModal}
-                open={openSmetaDesignModal}
-              />
-              <table
-                id="datatables-buttons"
-                className="table table-striped"
-                style={{ width: "100%" }}
-              >
-                <thead>
-                  <tr>
-                    <th>№</th>
-                    <th>Fayl linki</th>
-                    <th>Fayl başlığı</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>Tiger Nixon</td>
-                    <td>System Architect</td>
-                    <td>Edinburgh</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        </div>}
+        {step === 'start-to-work-form' && <RevisionTable />}
+        {step === 'smeta-design-form' && <AddSolutionTable 
+          handleOpenSolutionModal={handleOpenSolutionModal}
+          handleCloseSolutionModal={handleCloseSolutionModal}
+          openSolutionModal={openSolutionModal}
+        />}
+        {step === 'send-to-smeta-form' && <AddSmetaDesignTable
+          handleOpenSmetaDesignModal={handleOpenSmetaDesignModal}
+          handleCloseSmetaDesignModal={handleCloseSmetaDesignModal}
+          openSmetaDesignModal={openSmetaDesignModal}
+        />}
       </form>
     </main>
   );

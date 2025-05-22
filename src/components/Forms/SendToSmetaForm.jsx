@@ -1,7 +1,11 @@
+import StaticForm from "./StaticForm";
 
-const SendToSmetaForm = () => {
+const SendToSmetaForm = ({ setActiveStep }) => {
     return (
-        <div>SendToSmetaForm</div>
+        <StaticForm 
+            setActiveStep={setActiveStep}
+            step="send-to-smeta-form"
+        />
     );
 };
 
