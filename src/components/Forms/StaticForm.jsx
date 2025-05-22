@@ -10,8 +10,15 @@ const StaticForm = ({ setActiveStep }) => {
   const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
   const handleOpenSolutionModal = () => setOpenSolutionModal(true);
   const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
-  const { register, handleSubmit, control, watch, formState: { errors } } = useForm();
-  const tarix = watch('tarix');
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    trigger,
+    formState: { errors },
+  } = useForm();
+  const tarix = watch("tarix");
 
   const handleCloseSolutionModal = useCallback(() => {
     setOpenSolutionModal(false);
@@ -29,9 +36,15 @@ const StaticForm = ({ setActiveStep }) => {
 
   const onSubmit = (data) => {
     console.log(data);
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
+
+  const handleCancelClick = async () => {
+    const valid = await trigger(["statusQeyd", "legvSebebi"]);
+    if (valid) {
+        console.log("These fields are valid!");
+    }
+    };
 
   return (
     <main className="content px-4">
@@ -39,7 +52,7 @@ const StaticForm = ({ setActiveStep }) => {
       <form className="row my-4" onSubmit={handleSubmit(onSubmit)}>
         <div className="d-flex justify-content-end align-items-center gap-2 my-2">
           <button className="btn btn-primary py-2">Həlləri əlavə et</button>
-          <button className="btn btn-danger py-2">Ləğv et</button>
+          <button type="button" className="btn btn-danger py-2" onClick={handleCancelClick}>Ləğv et</button>
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
           <label htmlFor="title">Sorğu nömrəsi*</label>
@@ -241,8 +254,8 @@ const StaticForm = ({ setActiveStep }) => {
             // })}
           />
         </div>
-        <div className="col-12 d-flex flex-column gap-1 mb-5">
-          <label htmlFor="lifespan">Qeyd*</label>
+        <div className="col-12 d-flex flex-column gap-1 mb-3">
+          <label htmlFor="qeyd">Qeyd*</label>
           <input
             type="text"
             className="form-control"
@@ -250,6 +263,47 @@ const StaticForm = ({ setActiveStep }) => {
             name="qeyd"
             {...register("qeyd")}
           />
+        </div>
+        <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
+          <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
+          <input
+            type="text"
+            className={errors.statusQeyd ? "form-control error-border" : "form-control"}
+            id="statusQeyd"
+            name="statusQeyd"
+            {...register("statusQeyd", {
+                required: "Sənəd üzrə status qeydi boş ola bilməz!",
+            })}
+          />
+           {errors.statusQeyd && ( 
+            <p className="error-text">{errors.statusQeyd.message}</p>
+          )} 
+        </div>
+        <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
+          <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
+          <Controller
+            name="legvSebebi"
+            id="legvSebebi"
+            control={control}
+            rules={{ required: "Ləğv səbəbi boş ola bilməz!" }}
+            render={({ field }) => (
+              <Select
+                {...field}
+                options={options}
+                placeholder="Select type:"
+                className={
+                  errors.legvSebebi
+                    ? "basic-multi-select error-border"
+                    : "basic-multi-select"
+                }
+                classNamePrefix="select"
+                onChange={(selectedOption) => field.onChange(selectedOption)}
+              />
+            )}
+          />
+          {errors.legvSebebi && (
+            <p className="error-text">{errors.legvSebebi.message}</p>
+          )}
         </div>
         <div className="col-12 mb-3">
           <div className="card">
