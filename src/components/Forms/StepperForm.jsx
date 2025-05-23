@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { useEffect } from 'react';
+import { Box } from '@mui/material';
 import AddSolutionForm from './AddSolutionForm';
 import SmetaDesignForm from './SmetaDesignForm';
 import SendToSmetaForm from './SendToSmetaForm';
