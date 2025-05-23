@@ -1,17 +1,21 @@
+import { useSearchParams } from "react-router-dom";
 import AddSolution from "../Modals/AddSolutions";
 
 const AddSolutionTable = ({ handleOpenSolutionModal,handleCloseSolutionModal,openSolutionModal }) => {
+  const [searchParams] = useSearchParams();
+  const step = searchParams.get("step");
+
   return (
     <div className="col-12 mb-3">
       <div className="card">
         <div className="card-body">
-          <button
+          {step === "smeta-dizayn-formu" && <button
             type="button"
             className="btn btn-primary"
             onClick={handleOpenSolutionModal}
           >
             Ekle
-          </button>
+          </button>}
           <AddSolution
             handleClose={handleCloseSolutionModal}
             open={openSolutionModal}

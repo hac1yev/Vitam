@@ -1,19 +1,18 @@
 import { Link } from "react-router-dom";
 
-const BreadcrumbNav = () => {
+const BreadcrumbNav = ({ page, order }) => {
     return (
         <div className="header">
             <h1 className="header-title">
-                Settings
+                {page}
             </h1>
             <nav aria-label="breadcrumb">
                 <ol className="breadcrumb">
-                    <li className="breadcrumb-item">
-                        <Link to="/">Ana Sayfa</Link></li>
-                    <li className="breadcrumb-item">
-                        <Link to="/">Pages</Link>
-                    </li>
-                    <li className="breadcrumb-item active" aria-current="page">Settings</li>
+                    {order.map((item,index) => (
+                        <li className="breadcrumb-item" key={index}>
+                            <Link to={item.url}>{item.title}</Link>
+                        </li>
+                    ))}
                 </ol>
             </nav>
         </div>

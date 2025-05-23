@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 import { Box } from '@mui/material';
-import AddSolutionForm from './AddSolutionForm';
-import SmetaDesignForm from './SmetaDesignForm';
-import SendToSmetaForm from './SendToSmetaForm';
-import StartToWorksForm from './StartToWorksForm';
-import CompleteProcessForm from './CompleteProcessForm';
 import axios from '../../api/axios';
 import { useDispatch } from 'react-redux';
 import { FormDataSliceActions } from '../../store/formData-slice';
 import { useSearchParams } from 'react-router-dom';
+import AddSolutionForm from '../Forms/AddSolutionForm';
+import SmetaDesignForm from '../Forms/SmetaDesignForm';
+import SendToSmetaForm from '../Forms/SendToSmetaForm';
+import StartToWorksForm from '../Forms/StartToWorksForm';
+import CompleteProcessForm from '../Forms/CompleteProcessForm';
 
-export default function StepperForm() {
+export default function StartFlowContainer() {
   const dispatch = useDispatch();
   const [searchParams] = useSearchParams();
   const step = searchParams.get('step') || 'helleri-elave-et-formu';  
