@@ -1,7 +1,10 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { Controller, useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
+import { FormDataSliceActions } from "../../store/formData-slice";
+import { useMemo, useState } from "react";
 
 const style = {
   position: "absolute",
@@ -17,22 +20,26 @@ const style = {
 };
 
 export default function AddSolution({ handleClose, open }) {
-  const {
-    register,
-    handleSubmit,
-    control,
-    formState: { errors },
-  } = useForm();
+  const { register,handleSubmit,control,reset,formState: { errors } } = useForm();
+  const dispatch = useDispatch();
+  const formDatas = useSelector((state) => state.formDataReducer.formDatas);
+  const [solutionUnit,setSolutionUnit] = useState(null);
 
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const mapOptions = (list, valueKey, labelKey) =>
+    list?.map(item => ({
+      value: item[valueKey],
+      label: item[labelKey],
+  })) || [];
+
+  const regionListOption = useMemo(() => mapOptions(formDatas?.regionList, 'BOLGE_KOD', 'BOLGE_ADI'), [formDatas?.regionList]);
+  const solutionListOption = useMemo(() => mapOptions(formDatas?.solutionList, 'heller_KOD', 'heller_ADI'), [formDatas?.solutionList]);
 
   const handleSolutionModalSubmit = (data) => {
-    console.log(data);
+    dispatch(FormDataSliceActions.getSolutionItems(data));
+    reset();
+    handleClose();
   };
+  
 
   return (
     <div>
@@ -54,7 +61,7 @@ export default function AddSolution({ handleClose, open }) {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={options}
+                    options={solutionListOption}
                     placeholder="Select type:"
                     className={
                       errors.hell
@@ -62,8 +69,10 @@ export default function AddSolution({ handleClose, open }) {
                         : "basic-multi-select"
                     }
                     classNamePrefix="select"
-                    onChange={(selectedOption) =>
+                    onChange={(selectedOption) =>{
+                      setSolutionUnit(formDatas.solutionList.find((item) => item.heller_KOD === selectedOption.value));                      
                       field.onChange(selectedOption)
+                    }
                     }
                   />
                 )}
@@ -79,7 +88,8 @@ export default function AddSolution({ handleClose, open }) {
                 className="form-control"
                 id="olcuVahidi"
                 name="olcuVahidi"
-                {...register("olcuVahidi")}
+                readOnly
+                value={solutionUnit?.heller_VAHID_KOD || ""}
               />
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
@@ -90,7 +100,7 @@ export default function AddSolution({ handleClose, open }) {
                 render={({ field }) => (
                   <Select
                     {...field}
-                    options={options}
+                    options={regionListOption}
                     placeholder="Select type:"
                     className="basic-multi-select"
                     classNamePrefix="select"

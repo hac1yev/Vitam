@@ -1,6 +1,8 @@
 import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { FormDataSliceActions } from "../../store/formData-slice";
 
 const style = {
   position: "absolute",
@@ -16,10 +18,13 @@ const style = {
 };
 
 export default function AddSmetaDesign({ handleClose, open }) {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const dispatch = useDispatch();
 
   const handleSmetaDesignModalSubmit = (data) => {
-    console.log(data);
+    dispatch(FormDataSliceActions.getDesignItems(data));
+    reset();
+    handleClose();
   };
 
   return (

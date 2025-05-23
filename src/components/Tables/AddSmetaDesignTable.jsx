@@ -1,8 +1,17 @@
+import { useSelector } from "react-redux";
 import AddSmetaDesign from "../Modals/AddSmetaDesign";
+import { Pencil, Trash2 } from "lucide-react";
 
-const AddSmetaDesignTable = ({ handleOpenSmetaDesignModal,handleCloseSmetaDesignModal,openSmetaDesignModal }) => {
+const AddSmetaDesignTable = ({
+  handleOpenSmetaDesignModal,
+  handleCloseSmetaDesignModal,
+  openSmetaDesignModal,
+}) => {
+  const designItems = useSelector((state) => state.formDataReducer.designItems);
+
   return (
     <div className="col-12 mb-3">
+      {designItems.length === 0 && <p className="error-text mb-2">Smeta dizayn əlavə olunmalıdır!</p>}
       <div className="card">
         <div className="card-body">
           <button
@@ -26,14 +35,33 @@ const AddSmetaDesignTable = ({ handleOpenSmetaDesignModal,handleCloseSmetaDesign
                 <th>№</th>
                 <th>Fayl linki</th>
                 <th>Fayl başlığı</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>Tiger Nixon</td>
-                <td>System Architect</td>
-                <td>Edinburgh</td>
-              </tr>
+              {designItems && designItems.length > 0 ? (
+                designItems.map((item, index) => (
+                  <tr key={index}>
+                    <td>{index + 1}</td>
+                    <td>{item.fileUrl}</td>
+                    <td>{item.fileTitle}</td>
+                    <td className="d-flex align-items-center justify-content-center gap-1">
+                      <button type="button" className="btn btn-warning px-2">
+                        <Pencil width={20} />
+                      </button>
+                      <button type="button" className="btn btn-danger px-2">
+                        <Trash2 width={20} />
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="4" className="text-center text-muted">
+                    Fayl əlavə olunmayıb!
+                  </td>
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

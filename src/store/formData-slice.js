@@ -2,9 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const intialFormDataState = {
     formDatas: {},
-    selectedFormValues: {
-
-    }
+    selectedFormValues: {},
+    solutionItems: [],
+    designItems: [],
 };
 
 export const formDataSlice = createSlice({
@@ -20,6 +20,22 @@ export const formDataSlice = createSlice({
             state.selectedFormValues = {
                 ...action.payload
             }
+        },
+        getSolutionItems(state,action) {
+            state.solutionItems = [
+                ...state.solutionItems,
+                {...action.payload}
+            ]
+        },
+        getDesignItems(state,action) {
+            state.designItems = [
+                ...state.designItems,
+                {...action.payload}
+            ]
+        },
+        clearDesignAndSolutionItems(state) {
+            state.solutionItems = [];
+            state.designItems = [];
         }
     }
 });

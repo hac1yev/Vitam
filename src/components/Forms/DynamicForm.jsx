@@ -3,9 +3,10 @@ import Select from "react-select";
 import AddSolutionTable from "../Tables/AddSolutionTable";
 import AddSmetaDesignTable from "../Tables/AddSmetaDesignTable";
 import RevisionTable from "../Tables/RevisionTable";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { FormDataSliceActions } from "../../store/formData-slice";
 
 const DynamicForm = ({ nextStep, currentStep }) => {
   const [openSolutionModal, setOpenSolutionModal] = useState(false);
@@ -24,6 +25,9 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   );
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
+  const designItems = useSelector((state) => state.formDataReducer.designItems);
 
   const cancelListOption = useMemo(() => {
     return formDatas?.cancelList.map((item) => ({
@@ -44,9 +48,20 @@ const DynamicForm = ({ nextStep, currentStep }) => {
     e.preventDefault();
 
     if (nextStep === "/flows") {
+      dispatch(FormDataSliceActions.clearDesignAndSolutionItems());
       navigate(`${nextStep}`, { replace: true });
     } else {
-      navigate(`?step=${nextStep}`, { replace: true });
+      if(nextStep === 'smetaya-gonder-formu') {
+        if(solutionItems.length > 0) {
+          navigate(`?step=${nextStep}`, { replace: true });
+        }else return;
+      }else if(nextStep === 'islere-start-ver-formu') {
+        if(designItems.length > 0) {
+          navigate(`?step=${nextStep}`, { replace: true });
+        }else return;
+      }else{
+          navigate(`?step=${nextStep}`, { replace: true });
+      }
     }
   };
 
