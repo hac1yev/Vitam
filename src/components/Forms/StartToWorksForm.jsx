@@ -1,11 +1,8 @@
-import StaticForm from "./StaticForm";
+import DynamicForm from "./DynamicForm";
 
-const StartToWorksForm = ({ setActiveStep }) => {
+const StartToWorksForm = () => {
     return (
-        <StaticForm 
-            setActiveStep={setActiveStep}
-            step="start-to-work-form"
-        />
+        <DynamicForm nextStep='prosesi-tamamla-formu' currentStep='islere-start-ver-formu' />
     );
 };
 

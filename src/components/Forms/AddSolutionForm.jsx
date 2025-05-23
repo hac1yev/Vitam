@@ -2,16 +2,13 @@
 import { useEffect } from "react";
 import StaticForm from "./StaticForm";
 
-const AddSolutionForm = ({ setActiveStep }) => {  
+const AddSolutionForm = () => {  
   useEffect(() => {
     
   }, []);
 
   return (
-    <StaticForm 
-      setActiveStep={setActiveStep} 
-      step="add-solution-form"
-    />
+    <StaticForm />
   );
 };
 

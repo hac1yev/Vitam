@@ -1,19 +1,18 @@
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import BreadcrumbNav from "../Breadcrumb/BreadcrumbNav";
 import Select from "react-select";
 import { Controller, useForm } from "react-hook-form";
-import AddSolutionTable from "../Tables/AddSolutionTable";
-import AddSmetaDesignTable from "../Tables/AddSmetaDesignTable";
-import RevisionTable from "../Tables/RevisionTable";
+import { useDispatch, useSelector } from "react-redux";
+import { FormDataSliceActions } from "../../store/formData-slice";
+import { useNavigate } from "react-router-dom";
 
-const StaticForm = ({ setActiveStep,step }) => {
-  const [openSolutionModal, setOpenSolutionModal] = useState(false);
-  const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
-  const handleOpenSolutionModal = () => setOpenSolutionModal(true);
-  const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
+const StaticForm = () => {
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
+  const dispatch = useDispatch();
+  const formDatas = useSelector((state) => state.formDataReducer.formDatas);
   const { register, handleSubmit, control, watch, trigger, clearErrors, getValues, formState: { errors } } = useForm();
   const watchedFields = watch();
+  const navigate = useNavigate();
 
   useEffect(() => {
     Object.entries(errors).forEach(([fieldName, error]) => {
@@ -24,23 +23,23 @@ const StaticForm = ({ setActiveStep,step }) => {
     });
   }, [watchedFields, errors, clearErrors]);
 
-  const handleCloseSolutionModal = useCallback(() => {
-    setOpenSolutionModal(false);
-  }, []);
+  const mapOptions = (list, valueKey, labelKey) =>
+    list?.map(item => ({
+      value: item[valueKey],
+      label: item[labelKey],
+  })) || [];
 
-  const handleCloseSmetaDesignModal = useCallback(() => {
-    setOpenSmetaDesignModal(false);
-  }, []);
-
-  const options = [
-    { value: "chocolate", label: "Chocolate" },
-    { value: "strawberry", label: "Strawberry" },
-    { value: "vanilla", label: "Vanilla" },
-  ];
+  const customerListOption = useMemo(() => mapOptions(formDatas?.customerList, 'MUSHTERI_ID', 'MUSHTERI_ADI'), [formDatas?.customerList]);
+  const projectListOption = useMemo(() => mapOptions(formDatas?.projectList, 'PROYEKT_ID', 'PROYEKT_ADI'), [formDatas?.projectList]);
+  const customerTypeOption = useMemo(() => mapOptions(formDatas?.customerType, 'MUSHTERI_NOV_ID', 'MUSHTERI_NOV_ADI'), [formDatas?.customerType]);
+  const projectManagerOption = useMemo(() => mapOptions(formDatas?.managerList, 'MENECER_ID', 'MENECER_ADI'), [formDatas?.managerList]);
+  const cancelListOption = useMemo(() => mapOptions(formDatas?.cancelList, 'LEGV_ID', 'LEGV_ADI'), [formDatas?.cancelList]);
 
   const onSubmit = (data) => {
-    console.log(data);
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(FormDataSliceActions.addFormValues(data));
+    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+    navigate("?step=smeta-dizayn-formu", { replace: true });
   };
 
   const handleAddSolutionClick = async () => {
@@ -115,7 +114,7 @@ const StaticForm = ({ setActiveStep,step }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={options}
+                options={customerListOption}
                 placeholder="Select type:"
                 className={
                   errors.musteriAdi
@@ -163,7 +162,7 @@ const StaticForm = ({ setActiveStep,step }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={options}
+                options={projectListOption}
                 placeholder="Select type:"
                 className={
                   errors.layiheAdi
@@ -188,7 +187,7 @@ const StaticForm = ({ setActiveStep,step }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={options}
+                options={customerTypeOption}
                 placeholder="Select type:"
                 className={
                   errors.musteriNovu
@@ -214,7 +213,7 @@ const StaticForm = ({ setActiveStep,step }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={options}
+                options={projectManagerOption}
                 placeholder="Select type:"
                 className={
                   errors.layiheMeneceri
@@ -299,7 +298,7 @@ const StaticForm = ({ setActiveStep,step }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                options={options}
+                options={cancelListOption}
                 placeholder="Select type:"
                 className={
                   errors.legvSebebi
@@ -315,17 +314,6 @@ const StaticForm = ({ setActiveStep,step }) => {
             <p className="error-text">{errors.legvSebebi.message}</p>
           )}
         </div>}
-        {step === 'start-to-work-form' && <RevisionTable />}
-        {step === 'smeta-design-form' && <AddSolutionTable 
-          handleOpenSolutionModal={handleOpenSolutionModal}
-          handleCloseSolutionModal={handleCloseSolutionModal}
-          openSolutionModal={openSolutionModal}
-        />}
-        {step === 'send-to-smeta-form' && <AddSmetaDesignTable
-          handleOpenSmetaDesignModal={handleOpenSmetaDesignModal}
-          handleCloseSmetaDesignModal={handleCloseSmetaDesignModal}
-          openSmetaDesignModal={openSmetaDesignModal}
-        />}
       </form>
     </main>
   );

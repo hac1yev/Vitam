@@ -1,11 +1,8 @@
-import StaticForm from "./StaticForm";
+import DynamicForm from "./DynamicForm";
 
-const SendToSmetaForm = ({ setActiveStep }) => {
+const SendToSmetaForm = () => {
     return (
-        <StaticForm 
-            setActiveStep={setActiveStep}
-            step="send-to-smeta-form"
-        />
+        <DynamicForm nextStep='islere-start-ver-formu' currentStep='smetaya-gonder-formu' />
     );
 };
 
