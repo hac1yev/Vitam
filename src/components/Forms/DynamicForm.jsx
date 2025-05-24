@@ -26,7 +26,9 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
+  const solutionItems = useSelector(
+    (state) => state.formDataReducer.solutionItems
+  );
   const designItems = useSelector((state) => state.formDataReducer.designItems);
 
   const cancelListOption = useMemo(() => {
@@ -51,16 +53,16 @@ const DynamicForm = ({ nextStep, currentStep }) => {
       dispatch(FormDataSliceActions.clearDesignAndSolutionItems());
       navigate(`${nextStep}`, { replace: true });
     } else {
-      if(nextStep === 'smetaya-gonder-formu') {
-        if(solutionItems.length > 0) {
+      if (nextStep === "smetaya-gonder-formu") {
+        if (solutionItems.length > 0) {
           navigate(`?step=${nextStep}`, { replace: true });
-        }else return;
-      }else if(nextStep === 'islere-start-ver-formu') {
-        if(designItems.length > 0) {
+        } else return;
+      } else if (nextStep === "islere-start-ver-formu") {
+        if (designItems.length > 0) {
           navigate(`?step=${nextStep}`, { replace: true });
-        }else return;
-      }else{
-          navigate(`?step=${nextStep}`, { replace: true });
+        } else return;
+      } else {
+        navigate(`?step=${nextStep}`, { replace: true });
       }
     }
   };
@@ -78,151 +80,155 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   };
 
   return (
-    <form className="row my-4" onSubmit={onSubmit}>
-      <div className="d-flex justify-content-end align-items-center gap-2 my-2">
-        <button type="submit" className="btn btn-primary py-2">
-          {nextStep === "smeta-dizayn-formu" && "Həlləri əlavə et"}
-          {nextStep === "smetaya-gonder-formu" && "Smeta dizayn göndər"}
-          {nextStep === "islere-start-ver-formu" && "Smetaya göndər"}
-          {nextStep === "prosesi-tamamla-formu" && "İşlərə start ver"}
-          {nextStep === "/flows" && "Prosesi tamamla"}
-        </button>
+    <form onSubmit={onSubmit}>
+      <div className="card p-4">
+        <div className="row">
+          <div className="d-flex justify-content-end align-items-center gap-2 my-2">
+            <button type="submit" className="btn btn-primary py-2">
+              {nextStep === "smeta-dizayn-formu" && "Həlləri əlavə et"}
+              {nextStep === "smetaya-gonder-formu" && "Smeta dizayn göndər"}
+              {nextStep === "islere-start-ver-formu" && "Smetaya göndər"}
+              {nextStep === "prosesi-tamamla-formu" && "İşlərə start ver"}
+              {nextStep === "/flows" && "Prosesi tamamla"}
+            </button>
 
-        <button
-          type="button"
-          className="btn btn-danger py-2"
-          onClick={handleCancelClick}
-        >
-          Ləğv et
-        </button>
-      </div>
-      <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="sorguNomresi">Sorğu nömrəsi*</label>
-        <input
-          type="text"
-          className="form-control"
-          id="sorguNomresi"
-          name="sorguNomresi"
-          readOnly
-          disabled
-          value={selectedFormValues?.sorguNomresi}
-        />
-      </div>
-      <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="tarix">Tarix*</label>
-        <input
-          type="date"
-          className="form-control"
-          name="tarix"
-          id="tarix"
-          readOnly
-          disabled
-          value={selectedFormValues?.tarix}
-        />
-      </div>
-      <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="musteriAdi">Müştəri adı*</label>
-        <Select
-          placeholder="Select type:"
-          className="basic-multi-select"
-          classNamePrefix="select"
-          readOnly
-          isDisabled={true}
-          value={selectedFormValues?.musteriAdi}
-        />
-      </div>
-      <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="icraTarixi">İcra tarixi*</label>
-        <input
-          type="date"
-          id="icraTarixi"
-          name="icraTarixi"
-          className="form-control"
-          readOnly
-          disabled
-          value={selectedFormValues?.icraTarixi}
-        />
-      </div>
-      <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="layiheAdi">Layihə adı*</label>
-        <Select
-          placeholder="Select type:"
-          className="basic-multi-select"
-          classNamePrefix="select"
-          readOnly
-          isDisabled={true}
-          value={selectedFormValues?.layiheAdi}
-        />
-      </div>
-      <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="musteriNovu">Müştəri növü*</label>
-        <Select
-          placeholder="Select type:"
-          className="basic-multi-select"
-          classNamePrefix="select"
-          readOnly
-          isDisabled={true}
-          value={selectedFormValues?.musteriNovu}
-        />
-      </div>
-      <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="layiheMeneceri">Layihə meneceri*</label>
-        <Select
-          placeholder="Select type:"
-          className="basic-multi-select"
-          classNamePrefix="select"
-          readOnly
-          isDisabled={true}
-          value={selectedFormValues?.layiheMeneceri}
-        />
-      </div>
-      <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="elaqeliSexs">Əlaqəli şəxs*</label>
-        <input
-          type="text"
-          className="form-control"
-          id="elaqeliSexs"
-          name="elaqeliSexs"
-          readOnly
-          disabled
-          value={selectedFormValues?.elaqeliSexs}
-        />
-      </div>
-      <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="email">Email*</label>
-        <input
-          type="email"
-          id="email"
-          className="form-control"
-          name="email"
-          readOnly
-          disabled
-          value={selectedFormValues.email}
-        />
-      </div>
-      <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="telNomresi">Telefon nömrəsi*</label>
-        <input
-          type="text"
-          className="form-control"
-          id="telNomresi"
-          name="telNomresi"
-          readOnly
-          disabled
-          value={selectedFormValues.telNomresi}
-        />
-      </div>
-      <div className="col-12 d-flex flex-column gap-1 mb-3">
-        <label htmlFor="qeyd">Qeyd*</label>
-        <input
-          type="text"
-          className="form-control"
-          id="qeyd"
-          name="qeyd"
-          readOnly
-          disabled
-          value={selectedFormValues.qeyd}
-        />
+            <button
+              type="button"
+              className="btn btn-danger py-2"
+              onClick={handleCancelClick}
+            >
+              Ləğv et
+            </button>
+          </div>
+          <div className="col-12 col-lg-8 d-flex flex-column mb-3">
+            <label htmlFor="sorguNomresi">Sorğu nömrəsi*</label>
+            <input
+              type="text"
+              className="form-control"
+              id="sorguNomresi"
+              name="sorguNomresi"
+              readOnly
+              disabled
+              value={selectedFormValues?.sorguNomresi}
+            />
+          </div>
+          <div className="col-12 col-lg-4 d-flex flex-column mb-3">
+            <label htmlFor="tarix">Tarix*</label>
+            <input
+              type="date"
+              className="form-control"
+              name="tarix"
+              id="tarix"
+              readOnly
+              disabled
+              value={selectedFormValues?.tarix}
+            />
+          </div>
+          <div className="col-12 col-lg-8 d-flex flex-column mb-3">
+            <label htmlFor="musteriAdi">Müştəri adı*</label>
+            <Select
+              placeholder="Select type:"
+              className="basic-multi-select"
+              classNamePrefix="select"
+              readOnly
+              isDisabled={true}
+              value={selectedFormValues?.musteriAdi}
+            />
+          </div>
+          <div className="col-12 col-lg-4 d-flex flex-column mb-3">
+            <label htmlFor="icraTarixi">İcra tarixi*</label>
+            <input
+              type="date"
+              id="icraTarixi"
+              name="icraTarixi"
+              className="form-control"
+              readOnly
+              disabled
+              value={selectedFormValues?.icraTarixi}
+            />
+          </div>
+          <div className="col-12 col-lg-8 d-flex flex-column mb-3">
+            <label htmlFor="layiheAdi">Layihə adı*</label>
+            <Select
+              placeholder="Select type:"
+              className="basic-multi-select"
+              classNamePrefix="select"
+              readOnly
+              isDisabled={true}
+              value={selectedFormValues?.layiheAdi}
+            />
+          </div>
+          <div className="col-12 col-lg-4 d-flex flex-column mb-3">
+            <label htmlFor="musteriNovu">Müştəri növü*</label>
+            <Select
+              placeholder="Select type:"
+              className="basic-multi-select"
+              classNamePrefix="select"
+              readOnly
+              isDisabled={true}
+              value={selectedFormValues?.musteriNovu}
+            />
+          </div>
+          <div className="col-12 col-lg-8 d-flex flex-column mb-3">
+            <label htmlFor="layiheMeneceri">Layihə meneceri*</label>
+            <Select
+              placeholder="Select type:"
+              className="basic-multi-select"
+              classNamePrefix="select"
+              readOnly
+              isDisabled={true}
+              value={selectedFormValues?.layiheMeneceri}
+            />
+          </div>
+          <div className="col-12 col-lg-4 d-flex flex-column mb-3">
+            <label htmlFor="elaqeliSexs">Əlaqəli şəxs*</label>
+            <input
+              type="text"
+              className="form-control"
+              id="elaqeliSexs"
+              name="elaqeliSexs"
+              readOnly
+              disabled
+              value={selectedFormValues?.elaqeliSexs}
+            />
+          </div>
+          <div className="col-12 col-lg-8 d-flex flex-column mb-3">
+            <label htmlFor="email">Email*</label>
+            <input
+              type="email"
+              id="email"
+              className="form-control"
+              name="email"
+              readOnly
+              disabled
+              value={selectedFormValues.email}
+            />
+          </div>
+          <div className="col-12 col-lg-4 d-flex flex-column mb-3">
+            <label htmlFor="telNomresi">Telefon nömrəsi*</label>
+            <input
+              type="text"
+              className="form-control"
+              id="telNomresi"
+              name="telNomresi"
+              readOnly
+              disabled
+              value={selectedFormValues.telNomresi}
+            />
+          </div>
+          <div className="col-12 d-flex flex-column mb-3">
+            <label htmlFor="qeyd">Qeyd*</label>
+            <input
+              type="text"
+              className="form-control"
+              id="qeyd"
+              name="qeyd"
+              readOnly
+              disabled
+              value={selectedFormValues.qeyd}
+            />
+          </div>
+        </div>
       </div>
       {validateStatusAndCancel && (
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
@@ -273,15 +279,19 @@ const DynamicForm = ({ nextStep, currentStep }) => {
           )}
         </div>
       )}
-      {(currentStep === "islere-start-ver-formu" || currentStep === "prosesi-tamamla-formu") && <RevisionTable />}
-      {(currentStep === "smeta-dizayn-formu" || currentStep === "smetaya-gonder-formu") && (
+      {(currentStep === "islere-start-ver-formu" ||
+        currentStep === "prosesi-tamamla-formu") && <RevisionTable />}
+      {(currentStep === "smeta-dizayn-formu" ||
+        currentStep === "smetaya-gonder-formu") && (
         <AddSolutionTable
           handleOpenSolutionModal={handleOpenSolutionModal}
           handleCloseSolutionModal={handleCloseSolutionModal}
           openSolutionModal={openSolutionModal}
         />
       )}
-      {(currentStep === "smetaya-gonder-formu" || currentStep === "islere-start-ver-formu" || currentStep === "prosesi-tamamla-formu") && (
+      {(currentStep === "smetaya-gonder-formu" ||
+        currentStep === "islere-start-ver-formu" ||
+        currentStep === "prosesi-tamamla-formu") && (
         <AddSmetaDesignTable
           handleOpenSmetaDesignModal={handleOpenSmetaDesignModal}
           handleCloseSmetaDesignModal={handleCloseSmetaDesignModal}
