@@ -1,10 +1,22 @@
 import { Badge } from "@mui/material";
-import { Bell, ChevronDown, CircleUser } from "lucide-react";
+import { AlignJustify, Bell, ChevronDown, CircleUser } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { SidebarToggleSliceAction } from "../../store/sidebar-toggle-slice";
 
 const Navbar = () => {
+  const isOpenSidebar = useSelector((state) => state.sidebarToggleReducer.isOpenSidebar);
+  const dispatch = useDispatch();
+
+  const handleToggleSidebar = () => {
+    dispatch(SidebarToggleSliceAction.sidebarToggleAction(!isOpenSidebar));
+  }
+
   return (
     <nav className="navbar navbar-expand navbar-theme">
+      <div className="sidebar-toggle d-flex me-2" onClick={handleToggleSidebar}>
+				<AlignJustify width={24} color="#d9d9d9" />
+			</div>
       <div className="navbar-collapse collapse">
         <ul className="navbar-nav ms-auto">
           <li className="nav-item dropdown active">

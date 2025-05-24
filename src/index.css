@@ -43,3 +43,7 @@
 .error-border .select__control {
   border: none!important;
 }
+
+.sidebar-toggle:hover svg {
+  stroke: #fff;
+}

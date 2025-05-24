@@ -2,14 +2,14 @@ import BreadcrumbNav from '../components/Breadcrumb/BreadcrumbNav';
 import StartFlowContainer from '../components/StartFlow/StartFlowContainer';
 
 const order = [
-    {
-        title: "Akışlar",
-        url: '/flows'
-    },
-    {
-        title: "Akış başlat",
-        url: '/flows/start'
-    },
+  {
+    title: "Akışlar",
+    url: '/flows'
+  },
+  {
+    title: "Akış başlat",
+    url: '/flows/start'
+  },
 ]; 
 
 export default function StartFlow() {
