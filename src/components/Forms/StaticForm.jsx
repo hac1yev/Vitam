@@ -9,16 +9,7 @@ const StaticForm = () => {
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
   const dispatch = useDispatch();
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
-  const {
-    register,
-    handleSubmit,
-    control,
-    watch,
-    trigger,
-    clearErrors,
-    getValues,
-    formState: { errors },
-  } = useForm();
+  const { register,handleSubmit,control,watch,trigger,clearErrors,getValues,formState: { errors } } = useForm();
   const watchedFields = watch();
   const navigate = useNavigate();
 
@@ -72,9 +63,12 @@ const StaticForm = () => {
 
   const onSubmit = (data) => {
     dispatch(FormDataSliceActions.addFormValues(data));
-    // setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    dispatch(FormDataSliceActions.activeLoading());
 
-    navigate("?step=smeta-dizayn-formu", { replace: true });
+    setTimeout(() => {
+      dispatch(FormDataSliceActions.passiveLoading());
+      navigate("?step=smeta-dizayn-formu", { replace: true });
+    }, 2000)
   };
 
   const handleAddSolutionClick = async () => {

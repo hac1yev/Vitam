@@ -1,8 +1,9 @@
 import { useEffect } from 'react';
 import BreadcrumbNav from '../components/Breadcrumb/BreadcrumbNav';
 import StartFlowContainer from '../components/StartFlow/StartFlowContainer';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FormDataSliceActions } from '../store/formData-slice';
+import LoadingComponent from '../components/LoadingComponent';
 
 const order = [
   {
@@ -17,6 +18,7 @@ const order = [
 
 export default function StartFlow() {
   const dispatch = useDispatch();
+  const isLoading = useSelector((state) => state.formDataReducer.isLoading);
 
   useEffect(() => {
     dispatch(FormDataSliceActions.clearDesignAndSolutionItems());
@@ -24,6 +26,7 @@ export default function StartFlow() {
 
   return (
     <main className='content px-4'>
+        {isLoading && <LoadingComponent />}
         <BreadcrumbNav page="Akışlar" order={order} />
         <StartFlowContainer />
     </main>

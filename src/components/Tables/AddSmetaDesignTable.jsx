@@ -46,7 +46,11 @@ const AddSmetaDesignTable = ({
                     <td>{item.fileUrl}</td>
                     <td>{item.fileTitle}</td>
                     <td className="d-flex align-items-center justify-content-center gap-1">
-                      <button type="button" className="btn btn-warning px-2">
+                      <button 
+                        // onClick={handleEditItem.bind(null,)}
+                        className="btn btn-warning px-2"
+                        type="button" 
+                      >
                         <Pencil width={20} />
                       </button>
                       <button type="button" className="btn btn-danger px-2">

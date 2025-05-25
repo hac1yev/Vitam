@@ -5,6 +5,7 @@ const intialFormDataState = {
     selectedFormValues: {},
     solutionItems: [],
     designItems: [],
+    isLoading: false,
 };
 
 export const formDataSlice = createSlice({
@@ -48,6 +49,12 @@ export const formDataSlice = createSlice({
         clearDesignAndSolutionItems(state) {
             state.solutionItems = [];
             state.designItems = [];
+        },
+        activeLoading(state) {
+            state.isLoading = true;
+        },
+        passiveLoading(state) {
+            state.isLoading = false;
         }
     }
 });
