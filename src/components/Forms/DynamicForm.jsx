@@ -13,23 +13,14 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
   const handleOpenSolutionModal = () => setOpenSolutionModal(true);
   const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
-  const {
-    register,
-    control,
-    trigger,
-    formState: { errors },
-  } = useForm();
+  const { register, control, trigger, formState: { errors } } = useForm();
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
-  const selectedFormValues = useSelector(
-    (state) => state.formDataReducer.selectedFormValues
-  );
+  const selectedFormValues = useSelector((state) => state.formDataReducer.selectedFormValues);
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
+  const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
+  const designItems = useSelector((state) => state.formDataReducer.designItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const solutionItems = useSelector(
-    (state) => state.formDataReducer.solutionItems
-  );
-  const designItems = useSelector((state) => state.formDataReducer.designItems);
 
   const cancelListOption = useMemo(() => {
     return formDatas?.cancelList.map((item) => ({

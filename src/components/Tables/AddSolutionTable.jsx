@@ -1,85 +1,113 @@
 import { useSearchParams } from "react-router-dom";
 import AddSolution from "../Modals/AddSolutions";
-import { useSelector } from "react-redux";
-import { Delete, Edit, Pencil, Trash2 } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { Pencil, Trash2 } from "lucide-react";
+import { useCallback, useState } from "react";
+import EditSolution from "../Modals/EditSolution";
+import { FormDataSliceActions } from "../../store/formData-slice";
 
-const AddSolutionTable = ({
-  handleOpenSolutionModal,
-  handleCloseSolutionModal,
-  openSolutionModal,
-}) => {
-  const solutionItems = useSelector(
-    (state) => state.formDataReducer.solutionItems
-  );
+const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, openSolutionModal }) => {
+  const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
   const [searchParams] = useSearchParams();
   const step = searchParams.get("step");
+  const [openEditSolutionModal,setOpenEditSolutionModal] = useState(false);
+  const [itemToEdit,setItemToEdit] = useState(null);
+  const dispatch = useDispatch();
+
+  const handleCloseSolutionEditModal = useCallback(() => {
+    setOpenEditSolutionModal(false);
+  }, []);
+
+  const handleEditItem = (item) => {
+    setOpenEditSolutionModal(true);
+    setItemToEdit(item);
+  };
+
+  const handleDeleteItem = (id) => {        
+    dispatch(FormDataSliceActions.deleteSolutionItem({ id }));
+  }
 
   return (
-    <div className="col-12 my-3">
-      {solutionItems.length === 0 && <p className="error-text mb-2">Həll əlavə olunmalıdır!</p>}
-      <div className="card">
-        <div className="card-body">
-          {step === "smeta-dizayn-formu" && (
-            <button
-              type="button"
-              className="btn btn-primary"
-              onClick={handleOpenSolutionModal}
+    <>
+      <div className="col-12 my-3">
+        {solutionItems.length === 0 && <p className="error-text mb-2">Həll əlavə olunmalıdır!</p>}
+        <div className="card">
+          <div className="card-body">
+            {step === "smeta-dizayn-formu" && (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleOpenSolutionModal}
+              >
+                Ekle
+              </button>
+            )}
+            <table
+              id="datatables-buttons"
+              className="table table-striped"
+              style={{ width: "100%" }}
             >
-              Ekle
-            </button>
-          )}
-          <AddSolution
-            handleClose={handleCloseSolutionModal}
-            open={openSolutionModal}
-          />
-          <table
-            id="datatables-buttons"
-            className="table table-striped"
-            style={{ width: "100%" }}
-          >
-            <thead>
-              <tr>
-                <th>Həll adı</th>
-                <th>Bölgə</th>
-                <th>Ölçü vahidi</th>
-                <th>Miqdar</th>
-                <th>Çatdırılma tarixi</th>
-                <th>Qeyd</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {solutionItems && solutionItems.length > 0 ? (
-                solutionItems.map((solution, index) => (
-                  <tr key={index}>
-                    <td>{solution.hell.label}</td>
-                    <td>{solution.bolge.label}</td>
-                    <td>{solution.olcuVahidi}</td>
-                    <td>{solution.miqdar}</td>
-                    <td>{solution.deadline}</td>
-                    <td>{solution.qeyd}</td>
-                    <td className="d-flex align-items-center justify-content-center gap-1">
-                      <button type="button" className="btn btn-warning px-2">
-                        <Pencil width={20} />
-                      </button>
-                      <button type="button" className="btn btn-danger px-2">
-                        <Trash2 width={20} />
-                      </button>
+              <thead>
+                <tr>
+                  <th>Həll adı</th>
+                  <th>Bölgə</th>
+                  <th>Ölçü vahidi</th>
+                  <th>Miqdar</th>
+                  <th>Çatdırılma tarixi</th>
+                  <th>Qeyd</th>
+                  {step === 'smeta-dizayn-formu' && <th></th>}
+                </tr>
+              </thead>
+              <tbody>
+                {solutionItems && solutionItems.length > 0 ? (
+                  solutionItems.map((solution) => (
+                    <tr key={solution.hell.value}>
+                      <td>{solution.hell.label}</td>
+                      <td>{solution.bolge.label}</td>
+                      <td>{solution.olcuVahidi}</td>
+                      <td>{solution.miqdar}</td>
+                      <td>{solution.deadline}</td>
+                      <td>{solution.qeyd}</td>
+                      {step === 'smeta-dizayn-formu' && <td className="d-flex align-items-center justify-content-center gap-1">
+                        <button 
+                          onClick={handleEditItem.bind(null, solution)} 
+                          className="btn btn-warning px-2"
+                          type="button" 
+                        >
+                          <Pencil width={20} />
+                        </button>
+                        <button 
+                          onClick={handleDeleteItem.bind(null, solution.hell.value)}
+                          className="btn btn-danger px-2"
+                          type="button" 
+                        >
+                          <Trash2 width={20} />
+                        </button>
+                      </td>}
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="7" className="text-center text-muted">
+                      Həll əlavə olunmayıb!
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="7" className="text-center text-muted">
-                    Həll əlavə olunmayıb!
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
-    </div>
+      {openSolutionModal && <AddSolution
+        handleClose={handleCloseSolutionModal}
+        open={openSolutionModal}
+      />}
+      {openEditSolutionModal && <EditSolution
+        handleClose={handleCloseSolutionEditModal}
+        open={openEditSolutionModal}
+        itemToEdit={itemToEdit}
+      />}
+    </>
   );
 };
 

@@ -28,7 +28,7 @@ export default function StartFlowContainer() {
           axios.post("/api/heller/hellerList").then(res => res.data),
           axios.post("/api/bolge/bolgeList").then(res => res.data),
           axios.post("/api/LegvSebebleri/legvSebebleriList").then(res => res.data),
-        ]);
+        ]);        
         dispatch(FormDataSliceActions.getAllFormData({ smetaStatus, projectList, customerType, customerList, managerList, solutionList, regionList, cancelList }));
       } catch (err) {
         console.error("Failed to fetch step data", err);

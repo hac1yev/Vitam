@@ -4,7 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { FormDataSliceActions } from "../../store/formData-slice";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 const style = {
   position: "absolute",
@@ -14,16 +14,23 @@ const style = {
   maxWidth: 800,
   width: "90%",
   bgcolor: "background.paper",
-  border: "2px solid #000",
   boxShadow: 24,
   p: 4,
 };
 
-export default function AddSolution({ handleClose, open }) {
-  const { register,handleSubmit,control,reset,formState: { errors } } = useForm();
+const EditSolution = ({ handleClose, open, itemToEdit }) => {
+  const { register,handleSubmit,control,reset,formState: { errors } } = useForm({
+    defaultValues: {
+        hell: itemToEdit?.hell || null,
+        bolge: itemToEdit?.bolge || null,
+        miqdar: itemToEdit?.miqdar || "",
+        deadline: itemToEdit?.deadline || "",
+        qeyd: itemToEdit?.qeyd || "",
+    }
+  });
   const dispatch = useDispatch();
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
-  const [solutionUnit,setSolutionUnit] = useState(null);
+  const [solutionUnit,setSolutionUnit] = useState({});
 
   const mapOptions = (list, valueKey, labelKey) =>
     list?.map(item => ({
@@ -34,13 +41,22 @@ export default function AddSolution({ handleClose, open }) {
   const regionListOption = useMemo(() => mapOptions(formDatas?.regionList, 'BOLGE_KOD', 'BOLGE_ADI'), [formDatas?.regionList]);
   const solutionListOption = useMemo(() => mapOptions(formDatas?.solutionList, 'heller_KOD', 'heller_ADI'), [formDatas?.solutionList]);
 
-  const handleSolutionModalSubmit = (data) => {
-    dispatch(FormDataSliceActions.getSolutionItems({ ...data, olcuVahidi: solutionUnit.heller_VAHID_KOD }));
+  const handleEditSolutionModalSubmit = (data) => {    
+    dispatch(FormDataSliceActions.editSolutionItems({ hell_kod: itemToEdit.hell.value, data: { ...data, olcuVahidi: solutionUnit.heller_VAHID_KOD } }));
     reset();
     setSolutionUnit(null);
     handleClose();
   };
 
+  useEffect(() => {
+    if (itemToEdit?.hell?.value) {
+        const matched = formDatas.solutionList.find(
+        (item) => item.heller_KOD === itemToEdit.hell.value
+        );
+        setSolutionUnit(matched);
+    }
+  }, [itemToEdit, formDatas.solutionList]);
+  
   return (
     <div>
       <Modal
@@ -69,11 +85,14 @@ export default function AddSolution({ handleClose, open }) {
                         : "basic-multi-select"
                     }
                     classNamePrefix="select"
-                    onChange={(selectedOption) =>{
-                      setSolutionUnit(formDatas.solutionList.find((item) => item.heller_KOD === selectedOption.value));                      
-                      field.onChange(selectedOption)
-                    }
-                    }
+                    onChange={(selectedOption) => {
+                      setSolutionUnit(
+                        formDatas.solutionList.find(
+                          (item) => item.heller_KOD === selectedOption.value
+                        )
+                      );
+                      field.onChange(selectedOption);
+                    }}
                   />
                 )}
               />
@@ -89,8 +108,8 @@ export default function AddSolution({ handleClose, open }) {
                 id="olcuVahidi"
                 name="olcuVahidi"
                 readOnly
-                value={solutionUnit?.heller_VAHID_KOD || ""}
-              />
+                value={solutionUnit.heller_VAHID_KOD || ""}
+            />
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
               <label htmlFor="bolge">Bölgə*</label>
@@ -118,7 +137,7 @@ export default function AddSolution({ handleClose, open }) {
                 className={errors.miqdar ? "form-control error-border" : "form-control"}
                 id="miqdar"
                 name="miqdar"
-                {...register("miqdar", { required: 'Miqdar boş ola bilməz' })}
+                {...register("miqdar", { required: "Miqdar boş ola bilməz" })}
               />
               {errors.miqdar && (
                 <p className="error-text">{errors.miqdar.message}</p>
@@ -130,8 +149,12 @@ export default function AddSolution({ handleClose, open }) {
                 type="date"
                 id="deadline"
                 name="deadline"
-                className={errors.deadline ? "form-control error-border" : "form-control"}
-                {...register("deadline", { required: 'Çatdırılma tarixi boş ola bilməz' })}
+                className={
+                  errors.deadline ? "form-control error-border" : "form-control"
+                }
+                {...register("deadline", {
+                  required: "Çatdırılma tarixi boş ola bilməz",
+                })}
               />
               {errors.deadline && (
                 <p className="error-text">{errors.deadline.message}</p>
@@ -148,7 +171,12 @@ export default function AddSolution({ handleClose, open }) {
               />
             </div>
             <div className="d-flex justify-content-end gap-2 mt-2">
-              <button className="btn btn-primary" onClick={handleSubmit(handleSolutionModalSubmit)}>Əlavə et</button>
+              <button
+                className="btn btn-primary"
+                onClick={handleSubmit(handleEditSolutionModalSubmit)}
+              >
+                Redaktə et
+              </button>
               <button
                 type="button"
                 onClick={handleClose}
@@ -163,4 +191,6 @@ export default function AddSolution({ handleClose, open }) {
       </Modal>
     </div>
   );
-}
+};
+
+export default EditSolution;

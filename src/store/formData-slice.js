@@ -27,6 +27,18 @@ export const formDataSlice = createSlice({
                 {...action.payload}
             ]
         },
+        editSolutionItems(state,action) {
+            const findedIndex = state.solutionItems.findIndex((item) => {
+                return item.hell.value === action.payload.hell_kod
+            });
+            
+            state.solutionItems[findedIndex] = {
+                ...action.payload.data
+            }
+        },
+        deleteSolutionItem(state,action) {
+            state.solutionItems = state.solutionItems.filter((item) => item.hell.value !== action.payload.id);
+        },
         getDesignItems(state,action) {
             state.designItems = [
                 ...state.designItems,
