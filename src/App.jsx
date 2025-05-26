@@ -4,9 +4,10 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Home from "./pages/Home";
 import Flows from "./pages/Flows";
 import StartFlow from "./pages/StartFlow";
+import Register from "./pages/Register";
 
 function App() {
-  const token = true;
+  const token = false;
   return (
     <>
       <Routes>
@@ -17,20 +18,16 @@ function App() {
               <Route path="/flows" element={<Flows />} />
               <Route path="/flows/start" element={<StartFlow />} />
             </Route>
-            <Route
-              path="/login"
-              element={<Navigate to="/" />}
-            />
-            <Route
-              path="/register"
-              element={<Navigate to="/" />}
-            />
+            <Route path="/login" element={<Navigate to="/" />} />
+            <Route path="/register" element={<Navigate to="/" />} />
           </>
         )}
         {!token && (
           <>
-            <Route path="/" element={<Navigate to="/login"/> }/>
+            <Route path="/" element={<Navigate to="/login"/> } />
             <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+            <Route path="*" element={<Navigate to="/login"/> } />
           </>
         )}
       </Routes>

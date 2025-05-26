@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { sidebarMenuLinks } from "../../demo/sidebarLinks";
 import { useSelector } from "react-redux";
+import logo from '../../assets/logo.png';
 
 const Sidebar = () => {
   const isOpenSidebar = useSelector((state) => state.sidebarToggleReducer.isOpenSidebar);
@@ -15,7 +16,8 @@ const Sidebar = () => {
   return (
     <nav id="sidebar" className={isOpenSidebar ? "sidebar" : "sidebar toggled"}>
       <Link className="sidebar-brand" to={"/"}>
-        Spark
+        <img src={logo} alt="logo" />
+        B-Flow
       </Link>
       <div className="sidebar-content">
         <ul className="sidebar-nav">

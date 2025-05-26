@@ -68,7 +68,7 @@ const StaticForm = () => {
     setTimeout(() => {
       dispatch(FormDataSliceActions.passiveLoading());
       navigate("?step=smeta-dizayn-formu", { replace: true });
-    }, 2000)
+    }, 2000);
   };
 
   const handleAddSolutionClick = async () => {
