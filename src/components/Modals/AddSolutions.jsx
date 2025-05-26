@@ -131,7 +131,17 @@ export default function AddSolution({ handleClose, open }) {
                 id="deadline"
                 name="deadline"
                 className={errors.deadline ? "form-control error-border" : "form-control"}
-                {...register("deadline", { required: 'Çatdırılma tarixi boş ola bilməz' })}
+                {...register("deadline", { 
+                  required: 'Çatdırılma tarixi boş ola bilməz',
+                  validate: (value) => {
+                    const tarixValue = new Date().toISOString().split("T")[0];
+                    if (!tarixValue) return true;
+                    return (
+                      value >= tarixValue ||
+                      "İcra tarixi, tarixdən kiçik ola bilməz!"
+                    );
+                  },
+                })}
               />
               {errors.deadline && (
                 <p className="error-text">{errors.deadline.message}</p>

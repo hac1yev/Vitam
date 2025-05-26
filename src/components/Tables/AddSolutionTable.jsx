@@ -63,7 +63,7 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
                   solutionItems.map((solution) => (
                     <tr key={solution.hell.value}>
                       <td>{solution.hell.label}</td>
-                      <td>{solution.bolge.label}</td>
+                      <td>{solution?.bolge?.label || ""}</td>
                       <td>{solution.olcuVahidi}</td>
                       <td>{solution.miqdar}</td>
                       <td>{solution.deadline}</td>

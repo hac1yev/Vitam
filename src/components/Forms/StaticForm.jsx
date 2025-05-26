@@ -4,6 +4,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { FormDataSliceActions } from "../../store/formData-slice";
 import { useNavigate } from "react-router-dom";
+import { FlowSliceAction } from "../../store/flow-slice";
 
 const StaticForm = () => {
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
@@ -64,7 +65,11 @@ const StaticForm = () => {
   const onSubmit = (data) => {
     dispatch(FormDataSliceActions.addFormValues(data));
     dispatch(FormDataSliceActions.activeLoading());
-
+    // dispatch(FlowSliceAction.getSmetaData({
+    //   ...data,
+    //   step: 1
+    // }));
+    
     setTimeout(() => {
       dispatch(FormDataSliceActions.passiveLoading());
       navigate("?step=smeta-dizayn-formu", { replace: true });
@@ -96,9 +101,9 @@ const StaticForm = () => {
       ]);
       const valid = await trigger(["statusQeyd", "legvSebebi"]);
 
-      if (!valid) {
-        console.log("Ləğv səbəbi və status qeydi sahələri tələb olunur!");
-      }
+      if(valid){
+        navigate("/flows", { replace: true });
+      } 
     }, 0);
   };
 
@@ -113,7 +118,6 @@ const StaticForm = () => {
           >
             Həlləri əlavə et
           </button>
-
           <button
             type="button"
             className="btn btn-danger py-2"
@@ -130,7 +134,7 @@ const StaticForm = () => {
             id="sorguNomresi"
             name="sorguNomresi"
             readOnly
-            value={"S-AZ-101438"}
+            value={""}
             {...register("sorguNomresi")}
           />
         </div>

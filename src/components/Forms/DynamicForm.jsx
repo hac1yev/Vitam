@@ -5,15 +5,16 @@ import AddSmetaDesignTable from "../Tables/AddSmetaDesignTable";
 import RevisionTable from "../Tables/RevisionTable";
 import { useDispatch, useSelector } from "react-redux";
 import { Controller, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { FormDataSliceActions } from "../../store/formData-slice";
+import { FlowSliceAction } from "../../store/flow-slice";
 
 const DynamicForm = ({ nextStep, currentStep }) => {
   const [openSolutionModal, setOpenSolutionModal] = useState(false);
   const [openSmetaDesignModal, setOpenSmetaDesignModal] = useState(false);
   const handleOpenSolutionModal = () => setOpenSolutionModal(true);
   const handleOpenSmetaDesignModal = () => setOpenSmetaDesignModal(true);
-  const { register, control, trigger, formState: { errors } } = useForm();
+  const { register, control, trigger, clearErrors, formState: { errors } } = useForm();
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
   const selectedFormValues = useSelector((state) => state.formDataReducer.selectedFormValues);
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
@@ -21,6 +22,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const designItems = useSelector((state) => state.formDataReducer.designItems);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const cancelListOption = useMemo(() => {
     return formDatas?.cancelList.map((item) => ({
@@ -37,15 +39,16 @@ const DynamicForm = ({ nextStep, currentStep }) => {
     setOpenSmetaDesignModal(false);
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (nextStep === "/flows") {
       dispatch(FormDataSliceActions.clearDesignAndSolutionItems());
-      navigate(`${nextStep}`, { replace: true });
+      navigate(`${nextStep}`, { replace: true, state: { from: location } });
     } else {
       if (nextStep === "smetaya-gonder-formu") {
         if (solutionItems.length > 0) {
+          // dispatch(FlowSliceAction.getSmetaData({ heller: solutionItems }));
           navigate(`?step=${nextStep}`, { replace: true });
         } else return;
       } else if (nextStep === "islere-start-ver-formu") {
@@ -56,6 +59,18 @@ const DynamicForm = ({ nextStep, currentStep }) => {
         navigate(`?step=${nextStep}`, { replace: true });
       }
     }
+  };
+
+  const handleAddSolutionClick = async () => {
+    setValidateStatusAndCancel(false);
+    clearErrors(["statusQeyd", "legvSebebi"]);
+    await trigger([
+      "musteriAdi",
+      "icraTarixi",
+      "layiheAdi",
+      "musteriNovu",
+      "layiheMeneceri",
+    ]);
   };
 
   const handleCancelClick = async () => {
@@ -75,7 +90,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
       <div className="card p-4">
         <div className="row">
           <div className="d-flex justify-content-end align-items-center gap-2 my-2">
-            <button type="submit" className="btn btn-primary py-2">
+            <button type="submit" className="btn btn-primary py-2" onClick={handleAddSolutionClick}>
               {nextStep === "smeta-dizayn-formu" && "Həlləri əlavə et"}
               {nextStep === "smetaya-gonder-formu" && "Smeta dizayn göndər"}
               {nextStep === "islere-start-ver-formu" && "Smetaya göndər"}
@@ -219,57 +234,58 @@ const DynamicForm = ({ nextStep, currentStep }) => {
               value={selectedFormValues.qeyd}
             />
           </div>
+          {validateStatusAndCancel && (
+            <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
+              <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
+              <input
+                type="text"
+                className={
+                  errors.statusQeyd ? "form-control error-border" : "form-control"
+                }
+                id="statusQeyd"
+                name="statusQeyd"
+                {...register("statusQeyd", {
+                  required: "Sənəd üzrə status qeydi boş ola bilməz!",
+                })}
+              />
+              {errors.statusQeyd && (
+                <p className="error-text">{errors.statusQeyd.message}</p>
+              )}
+            </div>
+          )}
+          {validateStatusAndCancel && (
+            <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
+              <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
+              <Controller
+                name="legvSebebi"
+                id="legvSebebi"
+                control={control}
+                rules={{
+                  required: "Ləğv səbəbi boş ola bilməz!",
+                }}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    options={cancelListOption}
+                    placeholder="Select type:"
+                    className={
+                      errors.legvSebebi
+                        ? "basic-multi-select error-border"
+                        : "basic-multi-select"
+                    }
+                    classNamePrefix="select"
+                    onChange={(selectedOption) => field.onChange(selectedOption)}
+                  />
+                )}
+              />
+              {errors.legvSebebi && (
+                <p className="error-text">{errors.legvSebebi.message}</p>
+              )}
+            </div>
+          )}
         </div>
       </div>
-      {validateStatusAndCancel && (
-        <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
-          <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
-          <input
-            type="text"
-            className={
-              errors.statusQeyd ? "form-control error-border" : "form-control"
-            }
-            id="statusQeyd"
-            name="statusQeyd"
-            {...register("statusQeyd", {
-              required: "Sənəd üzrə status qeydi boş ola bilməz!",
-            })}
-          />
-          {errors.statusQeyd && (
-            <p className="error-text">{errors.statusQeyd.message}</p>
-          )}
-        </div>
-      )}
-      {validateStatusAndCancel && (
-        <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
-          <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
-          <Controller
-            name="legvSebebi"
-            id="legvSebebi"
-            control={control}
-            rules={{
-              required: "Ləğv səbəbi boş ola bilməz!",
-            }}
-            render={({ field }) => (
-              <Select
-                {...field}
-                options={cancelListOption}
-                placeholder="Select type:"
-                className={
-                  errors.legvSebebi
-                    ? "basic-multi-select error-border"
-                    : "basic-multi-select"
-                }
-                classNamePrefix="select"
-                onChange={(selectedOption) => field.onChange(selectedOption)}
-              />
-            )}
-          />
-          {errors.legvSebebi && (
-            <p className="error-text">{errors.legvSebebi.message}</p>
-          )}
-        </div>
-      )}
+      
       {(currentStep === "islere-start-ver-formu" ||
         currentStep === "prosesi-tamamla-formu") && <RevisionTable />}
       {(currentStep === "smeta-dizayn-formu" ||

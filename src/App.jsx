@@ -7,11 +7,12 @@ import StartFlow from "./pages/StartFlow";
 import Register from "./pages/Register";
 
 function App() {
-  const token = false;
+  const isLogin = localStorage.getItem("isLogin") || false;
+
   return (
     <>
       <Routes>
-        {token && (
+        {isLogin && (
           <>
             <Route element={<Dashboard/>}>
               <Route path="/" element={<Home />} />
@@ -22,7 +23,7 @@ function App() {
             <Route path="/register" element={<Navigate to="/" />} />
           </>
         )}
-        {!token && (
+        {!isLogin && (
           <>
             <Route path="/" element={<Navigate to="/login"/> } />
             <Route path="/login" element={<Login />} />

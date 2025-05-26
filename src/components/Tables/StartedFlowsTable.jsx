@@ -1,9 +1,12 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Play } from 'lucide-react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function StartedFlowsTable() {
-
+  const smetaData = useSelector(state => state.flowSliceReducer.smetaData);
+  console.log(smetaData);
+  
   const rows = [
     { id: 's1', title: 'sadas', name: 'sadasdas', email: "ukdasnk@gmail.com" },
     { id: 's2', title: 'sadas', name: 'sadasdas', email: "ukdasnk@gmail.com" },
@@ -15,7 +18,13 @@ export default function StartedFlowsTable() {
     { id: 's8', title: 'sadas', name: 'sadasdas', email: "ukdasnk@gmail.com" },
     { id: 's9', title: 'sadas', name: 'sadasdas', email: "ukdasnk@gmail.com" },
     { id: 's10', title: 'sadas', name: 'sadasdas', email: "ukdasnk@gmail.com" },
-  ];
+  ];  
+
+  const columns = Object.keys(rows[0]).map((key) => ({
+    field: key,
+    headerName: key.charAt(0).toUpperCase() + key.slice(1),
+    flex: 1,
+  }));
 
   const handleRowClick = (params) => {
     console.log(params);
@@ -37,12 +46,7 @@ export default function StartedFlowsTable() {
         </div>
         <DataGrid 
           className='worksonme-table' 
-          columns={[
-            { field: 'id' },
-            { field: 'title' },
-            { field: 'name' },
-            { field: 'email' }
-          ]} 
+          columns={columns} 
           rows={rows} 
           initialState={{
             ...rows.initialState,
