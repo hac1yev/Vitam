@@ -7,6 +7,7 @@ export const sidebarMenuLinks = [
     icon: Network,
     children: [
       {
+        id: 'a1',
         label: 'Vitam Sorğu (AZ)',
         to: '/flows',
         icon: Wrench,
@@ -19,11 +20,13 @@ export const sidebarMenuLinks = [
     icon: MessageSquareWarning,
     children: [
       {
+        id: 'r1',
         label: 'Günlük Rapor',
         to: '/reports/daily',
         icon: CalendarDays,
       },
       {
+        id: 'r2',
         label: 'Aylık Rapor',
         to: '/reports/monthly',
         icon: Hourglass,
@@ -36,6 +39,7 @@ export const sidebarMenuLinks = [
     icon: Settings,
     children: [
       {
+        id: 'm1',
         label: 'Kullanıcı Ayarları',
         to: '/management/users',
         icon: Settings2,

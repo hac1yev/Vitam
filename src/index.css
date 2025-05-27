@@ -51,3 +51,54 @@
 .profile-popover-list .MuiListItemIcon-root {
   min-width: 40px!important;
 }
+
+.sidebar-child-item {
+  display: flex;
+  align-items: center;
+  color: #3e4676;
+}
+
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  /* padding: 8px 16px; */
+  color: #3e4676;
+}
+
+.sidebar-item:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #3e4676;
+}
+
+.sidebar-child-item:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: rgba(0, 0, 0, 0.04);
+  color: #3e4676;
+}
+
+.sidebar-content .list-item-button:hover {
+  -webkit-text-decoration: none;
+  text-decoration: none;
+  background-color: transparent!important;
+  color: #2b76e7!important;
+}
+
+.sidebar-content .list-item-button:hover .MuiListItemIcon-root svg {
+  color: #2b76e7!important;
+}
+
+.sidebar-content .MuiListItemIcon-root {
+  min-width: 40px!important;
+}
+
+.sidebar-content .list-item-button svg {
+  width: 20px!important;
+  height: 20px!important;
+}
+
+.sidebar-child-item-button {
+  padding: 8px 16px 8px 32px!important;
+} 

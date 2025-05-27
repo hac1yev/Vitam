@@ -21,6 +21,9 @@ const Navbar = () => {
   };
 
   const handleClose = () => {
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
     setAnchorEl(null);
   };
 
@@ -42,7 +45,7 @@ const Navbar = () => {
               data-bs-toggle="dropdown"
             >
                 <Badge badgeContent={4} color="error">
-                    <Bell />
+                  <Bell />
                 </Badge>
             </Link>
           </li>

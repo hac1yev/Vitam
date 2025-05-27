@@ -1,17 +1,41 @@
-import { House } from "lucide-react";
+import { HomeIcon, House } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { sidebarMenuLinks } from "../../demo/sidebarLinks";
 import { useSelector } from "react-redux";
-import logo from '../../assets/logo.png';
+import logo from "../../assets/logo.png";
+import ListSubheader from "@mui/material/ListSubheader";
+import List from "@mui/material/List";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemIcon from "@mui/material/ListItemIcon";
+import ListItemText from "@mui/material/ListItemText";
+import Collapse from "@mui/material/Collapse";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import DraftsIcon from "@mui/icons-material/Drafts";
+import SendIcon from "@mui/icons-material/Send";
+import ExpandLess from "@mui/icons-material/ExpandLess";
+import ExpandMore from "@mui/icons-material/ExpandMore";
+import StarBorder from "@mui/icons-material/StarBorder";
+import { Box } from "@mui/material";
 
 const Sidebar = () => {
-  const isOpenSidebar = useSelector((state) => state.sidebarToggleReducer.isOpenSidebar);
-  const [openDropdown, setOpenDropdown] = useState({
-    flows: false,
-    reports: false,
-    management: false,
-  });
+  const isOpenSidebar = useSelector(
+    (state) => state.sidebarToggleReducer.isOpenSidebar
+  );
+  const [open, setOpen] = useState("");
+  const [selectedMenuItem, setSelectedMenuItem] = useState("as1");
+
+  const handleListItemClick = (event, id) => {
+    setSelectedMenuItem(id);
+  };
+
+  const handleClick = (id) => {
+    if(id === open) {
+      setOpen("");
+    }else{
+      setOpen(id);
+    }
+  };
 
   return (
     <nav id="sidebar" className={isOpenSidebar ? "sidebar" : "sidebar toggled"}>
@@ -20,68 +44,54 @@ const Sidebar = () => {
         B-Flow
       </Link>
       <div className="sidebar-content">
-        <ul className="sidebar-nav">
-          <li className="sidebar-item">
-            <Link
-              to={"/"}
-              data-bs-target="#dashboards"
-              className="sidebar-link collapsed"
+        <List
+          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+          component="nav"
+        >
+          <Link
+            to={"/"}
+            className="sidebar-item"
+          >
+            <ListItemButton 
+              selected={selectedMenuItem === "as1"}
+              onClick={(event) => handleListItemClick(event, "as1")}
             >
-              <House width={18} />
-              <span className="align-middle">Ana Sayfa</span>
-            </Link>
-          </li>
+              <ListItemIcon>
+              <HomeIcon width={18} /> 
+            </ListItemIcon>
+            <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary="Ana Sayfa" />
+            </ListItemButton>
+          </Link>
           {sidebarMenuLinks.map((link) => (
-            <li className="sidebar-item" key={link.id}>
-              <div
-                onClick={() =>
-                  setOpenDropdown((prev) => {
-                    return {
-                      ...prev,
-                      [link.id]: !prev[link.id],
-                    };
-                  })
-                }
-                data-bs-toggle="collapse"
-                className={
-                  openDropdown[link.id]
-                    ? "sidebar-link"
-                    : "sidebar-link collapsed"
-                }
-              >
-                <link.icon width={18} />
-                <span className="align-middle">{link.title}</span>
-              </div>
-              {openDropdown[link.id] && (
-                <ul
-                  id="pages"
-                  className="sidebar-dropdown list-unstyled"
-                  data-bs-parent="#sidebar"
-                >
-                  {link.children?.map((child, index) => (
-                    <li
-                      className="sidebar-item"
-                      key={index}
-                      onClick={() =>
-                        setOpenDropdown((prev) => {
-                          return {
-                            ...prev,
-                            [link.id]: false,
-                          };
-                        })
-                      }
-                    >
-                      <Link to={child.to} className="sidebar-link">
-                        <child.icon width={16} />
-                        <span className="align-middle">{child.label}</span>
-                      </Link>
-                    </li>
+            <Box key={link.id}>
+              <ListItemButton onClick={handleClick.bind(null, link.id)} className="list-item-button">
+                <ListItemIcon>
+                  <link.icon width={18} />
+                </ListItemIcon>
+                <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary={link.title} />
+                {open === link.id ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+              <Collapse in={link.id === open} timeout={300} unmountOnExit>
+                <List component="div" disablePadding>
+                  {link.children.map((child) => (
+                    <Link to={child.to} sx={{ pl: 4 }} key={child.id} className="sidebar-child-item">
+                      <ListItemButton 
+                        selected={selectedMenuItem === child.id}
+                        onClick={(event) => handleListItemClick(event, child.id)}
+                        className="sidebar-child-item-button"
+                      >
+                        <ListItemIcon>
+                          <child.icon width={18} />
+                        </ListItemIcon>
+                        <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary={child.label} />
+                      </ListItemButton>
+                    </Link>
                   ))}
-                </ul>
-              )}
-            </li>
+                </List>
+              </Collapse>
+            </Box>
           ))}
-        </ul>
+        </List>
       </div>
     </nav>
   );
