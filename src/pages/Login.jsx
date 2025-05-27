@@ -1,9 +1,11 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
+import { useState } from "react";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
+  const [errorMsg,setErrorMsg] = useState("");
 
   const onSubmit = async (data) => {
     try {        
@@ -12,6 +14,7 @@ const Login = () => {
       });      
 
       if (response.status === 200) {
+        setErrorMsg("");
         localStorage.setItem("isLogin", true);
         const userInfo = JSON.parse(JSON.stringify(response.data));
         delete userInfo.shifre;
@@ -19,6 +22,7 @@ const Login = () => {
         window.location.reload();
       }
     } catch (error) {
+      setErrorMsg(error.response.data);
       console.error("Login failed:", error);
     }
   };
@@ -40,6 +44,12 @@ const Login = () => {
                     <div className="text-center mb-3">
                       <h2>Giriş</h2>
                     </div>
+
+                    {errorMsg && (
+                      <div className="error-wrapper">
+                        <p className="error-text">{errorMsg}</p>
+                      </div>
+                    )}
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mb-3">
