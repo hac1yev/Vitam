@@ -47,3 +47,7 @@
 .sidebar-toggle:hover svg {
   stroke: #fff;
 }
+
+.profile-popover-list .MuiListItemIcon-root {
+  min-width: 40px!important;
+}

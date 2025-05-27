@@ -12895,6 +12895,7 @@ a.card {
 }
 .navbar .nav-item {
   line-height: 3rem;
+  cursor: pointer;
 }
 .navbar .nav-item a {
   text-decoration: none;
