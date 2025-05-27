@@ -13,6 +13,9 @@ const Login = () => {
 
       if (response.status === 200) {
         localStorage.setItem("isLogin", true);
+        const userInfo = JSON.parse(JSON.stringify(response.data));
+        delete userInfo.shifre;
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
         window.location.reload();
       }
     } catch (error) {

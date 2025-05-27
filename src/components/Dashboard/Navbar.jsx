@@ -10,6 +10,7 @@ const Navbar = () => {
   const isOpenSidebar = useSelector((state) => state.sidebarToggleReducer.isOpenSidebar);
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
+  const userInfo = JSON.parse(localStorage.getItem("userInfo"));
 
   const handleToggleSidebar = () => {
     dispatch(SidebarToggleSliceAction.sidebarToggleAction(!isOpenSidebar));
@@ -56,7 +57,7 @@ const Navbar = () => {
               data-bs-toggle="dropdown"
             >
                 <CircleUser color="white" />
-                Ilkin Haciyev
+                {userInfo.adi}{" "}{userInfo.soyadi}
                 <ChevronDown width={16} />
             </div>
           </li>
