@@ -1,0 +1,12 @@
+{
+    "login_title": "Giriş",
+    "login_username_label": "İstifadəçi adı",
+    "login_username_placeholder": "İstifadəçi adınızı daxil edin",
+    "login_password_label": "Şifrə",
+    "login_password_placeholder": "Şifrənizi daxil edin",
+    "login_username_error": "İstifadəçi adı boş ola bilməz!",
+    "login_password_error": "Şifrə boş ola bilməz!",
+    "login_dont_have_account": "Hesabınız yoxdur?",
+    "login_register": "Qeydiyyatdan keç",
+    "login_button": "Daxil ol"
+}

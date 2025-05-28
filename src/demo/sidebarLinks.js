@@ -3,12 +3,12 @@ import { MessageSquareWarning, Network, Settings, Settings2,Wrench, CalendarDays
 export const sidebarMenuLinks = [
   {
     id: 'flows',
-    title: 'Akışlar',
+    title: 'sidebar.flows.title',
     icon: Network,
     children: [
       {
         id: 'a1',
-        label: 'Vitam Sorğu (AZ)',
+        label: 'sidebar.flows.vitam',
         to: '/flows',
         icon: Wrench,
       },
@@ -16,18 +16,18 @@ export const sidebarMenuLinks = [
   },
   {
     id: 'reports',
-    title: 'Raporlar',
+    title: 'sidebar.reports.title',
     icon: MessageSquareWarning,
     children: [
       {
         id: 'r1',
-        label: 'Günlük Rapor',
+        label: 'sidebar.reports.daily',
         to: '/reports/daily',
         icon: CalendarDays,
       },
       {
         id: 'r2',
-        label: 'Aylık Rapor',
+        label: 'sidebar.reports.monthly',
         to: '/reports/monthly',
         icon: Hourglass,
       },
@@ -35,12 +35,12 @@ export const sidebarMenuLinks = [
   },
   {
     id: 'management',
-    title: 'Yönetici işlemler',
+    title: 'sidebar.management.title',
     icon: Settings,
     children: [
       {
         id: 'm1',
-        label: 'Kullanıcı Ayarları',
+        label: 'sidebar.management.userSettings',
         to: '/management/users',
         icon: Settings2,
       },

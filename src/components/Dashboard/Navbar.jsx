@@ -5,12 +5,15 @@ import { Link } from "react-router-dom";
 import { SidebarToggleSliceAction } from "../../store/sidebar-toggle-slice";
 import { useState } from "react";
 import ProfilePopover from "../Popovers/ProfilePopover";
+import { useTranslation } from "react-i18next";
 
 const Navbar = () => {
   const isOpenSidebar = useSelector((state) => state.sidebarToggleReducer.isOpenSidebar);
   const [anchorEl, setAnchorEl] = useState(null);
   const dispatch = useDispatch();
   const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+  const { i18n } = useTranslation();
+  const lang = localStorage.getItem("lang");
 
   const handleToggleSidebar = () => {
     dispatch(SidebarToggleSliceAction.sidebarToggleAction(!isOpenSidebar));
@@ -27,6 +30,11 @@ const Navbar = () => {
     setAnchorEl(null);
   };
 
+   const handleLangChange = (e) => {
+      i18n.changeLanguage(e.target.value);
+      localStorage.setItem('lang', e.target.value)
+    };      
+
   const open = Boolean(anchorEl);
   const id = open ? 'simple-popover' : undefined;
 
@@ -37,6 +45,10 @@ const Navbar = () => {
 			</div>
       <div className="navbar-collapse collapse">
         <ul className="navbar-nav ms-auto">
+          <select className="language-selector" onChange={handleLangChange}>
+            <option value="az" selected={lang === 'az'}>AZE</option>
+            <option value="en" selected={lang === 'en'}>EN</option>
+          </select>
           <li className="nav-item dropdown active">
             <Link to="/"
               className="nav-link dropdown-toggle position-relative"
@@ -50,7 +62,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li 
-            className="nav-item dropdown ms-lg-2"
+            className="nav-item dropdown"
             aria-describedby={id} variant="contained" 
             onClick={handleClick}
           >

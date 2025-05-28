@@ -1,5 +1,8 @@
+import { useTranslation } from "react-i18next";
 
 const RevisionTable = () => {
+  const { t } = useTranslation('flows');
+
   return (
     <div className="col-12 my-3">
       <div className="card">
@@ -11,9 +14,9 @@ const RevisionTable = () => {
           >
             <thead>
               <tr>
-                <th>Reviziya nömrəsi</th>
-                <th>Sorğu nömrəsi</th>
-                <th>Status</th>
+                <th>{t("flow_revision_table_col1")}</th>
+                <th>{t("flow_revision_table_col2")}</th>
+                <th>{t("flow_revision_table_col3")}</th>
               </tr>
             </thead>
             <tbody>

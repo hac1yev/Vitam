@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Select from "react-select";
 import { FormDataSliceActions } from "../../store/formData-slice";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const style = {
   position: "absolute",
@@ -31,6 +32,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
   const dispatch = useDispatch();
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
   const [solutionUnit,setSolutionUnit] = useState({});
+  const { t } = useTranslation('flows');
 
   const mapOptions = (list, valueKey, labelKey) =>
     list?.map(item => ({
@@ -67,13 +69,13 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
       >
         <Box sx={style}>
           <div className="row">
-            <h3 className="mb-4">Həlləri əlavə et</h3>
+            <h3 className="mb-4">{t("flow_table_add_title")}</h3>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="hell">Həll adı*</label>
+              <label htmlFor="hell">{t("flow_solution_table_col1")}</label>
               <Controller
                 name="hell"
                 control={control}
-                rules={{ required: "Hell adı boş ola bilməz!" }}
+                rules={{ required: t("flow_solution_col1_error") }}
                 render={({ field }) => (
                   <Select
                     {...field}
@@ -101,7 +103,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
               )}
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="olcuVahidi">Ölçü vahidi*</label>
+              <label htmlFor="olcuVahidi">{t("flow_solution_table_col3")}</label>
               <input
                 type="text"
                 className="form-control"
@@ -112,7 +114,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
             />
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="bolge">Bölgə*</label>
+              <label htmlFor="bolge">{t("flow_solution_table_col2")}</label>
               <Controller
                 name="bolge"
                 control={control}
@@ -131,20 +133,20 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
               />
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="miqdar">Miqdar*</label>
+              <label htmlFor="miqdar">{t("flow_solution_table_col4")}</label>
               <input
                 type="number"
                 className={errors.miqdar ? "form-control error-border" : "form-control"}
                 id="miqdar"
                 name="miqdar"
-                {...register("miqdar", { required: "Miqdar boş ola bilməz" })}
+                {...register("miqdar", { required: t("flow_solution_col5_error" )})}
               />
               {errors.miqdar && (
                 <p className="error-text">{errors.miqdar.message}</p>
               )}
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="deadline">Çatdırılma tarixi*</label>
+              <label htmlFor="deadline">{t("flow_solution_table_col5")}</label>
               <input
                 type="date"
                 id="deadline"
@@ -153,7 +155,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
                   errors.deadline ? "form-control error-border" : "form-control"
                 }
                 {...register("deadline", {
-                  required: "Çatdırılma tarixi boş ola bilməz",
+                  required: t("flow_solution_col3_error"),
                 })}
               />
               {errors.deadline && (
@@ -161,7 +163,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
               )}
             </div>
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="miqdar">Qeyd*</label>
+              <label htmlFor="miqdar">{t("flow_solution_table_col6")}</label>
               <input
                 type="text"
                 className="form-control"
@@ -175,7 +177,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
                 className="btn btn-primary"
                 onClick={handleSubmit(handleEditSolutionModalSubmit)}
               >
-                Redaktə et
+                {t("flow_table_edit_button")}
               </button>
               <button
                 type="button"
@@ -183,7 +185,7 @@ const EditSolution = ({ handleClose, open, itemToEdit }) => {
                 className="btn btn-outline-light"
                 style={{ color: "#666", border: "1px solid #666" }}
               >
-                Ləğv et
+                {t("flow_table_cancel_button")}
               </button>
             </div>
           </div>

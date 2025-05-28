@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import AddSmetaDesign from "../Modals/AddSmetaDesign";
 import { Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 const AddSmetaDesignTable = ({
   handleOpenSmetaDesignModal,
@@ -8,10 +9,11 @@ const AddSmetaDesignTable = ({
   openSmetaDesignModal,
 }) => {
   const designItems = useSelector((state) => state.formDataReducer.designItems);
+  const { t } = useTranslation('flows');
 
   return (
     <div className="col-12 mb-3">
-      {designItems.length === 0 && <p className="error-text mb-2">Smeta dizayn əlavə olunmalıdır!</p>}
+      {designItems.length === 0 && <p className="error-text mb-2">{t("flow_design_required")}</p>}
       <div className="card">
         <div className="card-body">
           <button
@@ -19,7 +21,7 @@ const AddSmetaDesignTable = ({
             className="btn btn-primary"
             onClick={handleOpenSmetaDesignModal}
           >
-            Ekle
+            {t("flow_table_add_button")}
           </button>
           <AddSmetaDesign
             handleClose={handleCloseSmetaDesignModal}
@@ -33,8 +35,8 @@ const AddSmetaDesignTable = ({
             <thead>
               <tr>
                 <th>№</th>
-                <th>Fayl linki</th>
-                <th>Fayl başlığı</th>
+                <th>{t("flow_design_table_col1")}</th>
+                <th>{t("flow_design_table_col2")}</th>
                 <th></th>
               </tr>
             </thead>
@@ -62,7 +64,7 @@ const AddSmetaDesignTable = ({
               ) : (
                 <tr>
                   <td colSpan="4" className="text-center text-muted">
-                    Fayl əlavə olunmayıb!
+                    {t('flow_design_no_row')}
                   </td>
                 </tr>
               )}

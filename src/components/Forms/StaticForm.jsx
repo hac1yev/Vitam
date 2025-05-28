@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { FormDataSliceActions } from "../../store/formData-slice";
 import { useNavigate } from "react-router-dom";
 import { FlowSliceAction } from "../../store/flow-slice";
+import { useTranslation } from "react-i18next";
 
 const StaticForm = () => {
   const [validateStatusAndCancel, setValidateStatusAndCancel] = useState(false);
@@ -13,6 +14,7 @@ const StaticForm = () => {
   const { register,handleSubmit,control,watch,trigger,clearErrors,getValues,formState: { errors } } = useForm();
   const watchedFields = watch();
   const navigate = useNavigate();
+  const { i18n,t } = useTranslation('flows');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -20,6 +22,17 @@ const StaticForm = () => {
       navigate("?step=helleri-elave-et-formu", { replace: true });
     }
   }, [navigate]);
+
+  useEffect(() => {
+    const subscription = i18n.on('languageChanged', () => {
+      clearErrors();
+      setValidateStatusAndCancel(false);
+    });
+
+    return () => {
+      i18n.off('languageChanged', subscription);
+    };
+  }, [clearErrors,i18n]);
 
   useEffect(() => {
     Object.entries(errors).forEach(([fieldName, error]) => {
@@ -116,18 +129,18 @@ const StaticForm = () => {
             className="btn btn-primary py-2"
             onClick={handleAddSolutionClick}
           >
-            Həlləri əlavə et
+            {t("flow_add_solution_button")}
           </button>
           <button
             type="button"
             className="btn btn-danger py-2"
             onClick={handleCancelClick}
           >
-            Ləğv et
+            {t("flow_table_cancel_button")}
           </button>
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="sorguNomresi">Sorğu nömrəsi*</label>
+          <label htmlFor="sorguNomresi">{t("flows_sorgu_nomresi_label")}</label>
           <input
             type="text"
             className="form-control"
@@ -139,7 +152,7 @@ const StaticForm = () => {
           />
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="tarix">Tarix*</label>
+          <label htmlFor="tarix">{t("flows_tarix_label")}</label>
           <input
             type="date"
             className="form-control"
@@ -150,16 +163,16 @@ const StaticForm = () => {
           />
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="musteriAdi">Müştəri adı*</label>
+          <label htmlFor="musteriAdi">{t("flows_musteri_adi_label")}</label>
           <Controller
             name="musteriAdi"
             control={control}
-            rules={{ required: "Müştəri adı boş ola bilməz!" }}
+            rules={{ required: t("flow_musteri_adi_error") }}
             render={({ field }) => (
               <Select
                 {...field}
                 options={customerListOption}
-                placeholder="Select type:"
+                placeholder={t("flow_select_placeholder")}
                 className={
                   errors.musteriAdi
                     ? "basic-multi-select error-border"
@@ -175,7 +188,7 @@ const StaticForm = () => {
           )}
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="icraTarixi">İcra tarixi*</label>
+          <label htmlFor="icraTarixi">{t("flows_icra_tarixi_label")}</label>
           <input
             type="date"
             id="icraTarixi"
@@ -184,13 +197,13 @@ const StaticForm = () => {
               errors.icraTarixi ? "form-control error-border" : "form-control"
             }
             {...register("icraTarixi", {
-              required: "İcra tarixi boş ola bilməz!",
+              required: t("flow_icra_tarixi_error1"),
               validate: (value) => {
                 const tarixValue = getValues("tarix");
                 if (!tarixValue) return true;
                 return (
                   value >= tarixValue ||
-                  "İcra tarixi, tarixdən kiçik ola bilməz!"
+                  t("flow_icra_tarixi_error2")
                 );
               },
             })}
@@ -200,16 +213,16 @@ const StaticForm = () => {
           )}
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="layiheAdi">Layihə adı*</label>
+          <label htmlFor="layiheAdi">{t("flow_layihe_adi_label")}</label>
           <Controller
             name="layiheAdi"
             control={control}
-            rules={{ required: "Layihe adı boş ola bilməz!" }}
+            rules={{ required: t("flow_layihe_adi_error") }}
             render={({ field }) => (
               <Select
                 {...field}
                 options={projectListOption}
-                placeholder="Select type:"
+                placeholder={t("flow_select_placeholder")}
                 className={
                   errors.layiheAdi
                     ? "basic-multi-select error-border"
@@ -225,16 +238,16 @@ const StaticForm = () => {
           )}
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="musteriNovu">Müştəri növü*</label>
+          <label htmlFor="musteriNovu">{t("flow_musteri_novu_label")}</label>
           <Controller
             name="musteriNovu"
             control={control}
-            rules={{ required: "Müştəri növü boş ola bilməz!" }}
+            rules={{ required: t("flow_musteri_novu_error") }}
             render={({ field }) => (
               <Select
                 {...field}
                 options={customerTypeOption}
-                placeholder="Select type:"
+                placeholder={t("flow_select_placeholder")}
                 className={
                   errors.musteriNovu
                     ? "basic-multi-select error-border"
@@ -250,17 +263,17 @@ const StaticForm = () => {
           )}
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="layiheMeneceri">Layihə meneceri*</label>
+          <label htmlFor="layiheMeneceri">{t("flow_layihe_meneceri_label")}</label>
           <Controller
             name="layiheMeneceri"
             id="layiheMeneceri"
             control={control}
-            rules={{ required: "Layihə meneceri boş ola bilməz!" }}
+            rules={{ required: t("flow_layihe_meneceri_error") }}
             render={({ field }) => (
               <Select
                 {...field}
                 options={projectManagerOption}
-                placeholder="Select type:"
+                placeholder={t("flow_select_placeholder")}
                 className={
                   errors.layiheMeneceri
                     ? "basic-multi-select error-border"
@@ -276,7 +289,7 @@ const StaticForm = () => {
           )}
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="elaqeliSexs">Əlaqəli şəxs*</label>
+          <label htmlFor="elaqeliSexs">{t("flow_elaqeli_sexs_label")}</label>
           <input
             type="text"
             className="form-control"
@@ -286,7 +299,7 @@ const StaticForm = () => {
           />
         </div>
         <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="email">Email*</label>
+          <label htmlFor="email">{t("flow_email_label")}</label>
           <input
             type="email"
             id="email"
@@ -296,7 +309,7 @@ const StaticForm = () => {
           />
         </div>
         <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="telNomresi">Telefon nömrəsi*</label>
+          <label htmlFor="telNomresi">{t("flow_telefon_label")}</label>
           <input
             type="text"
             className="form-control"
@@ -306,7 +319,7 @@ const StaticForm = () => {
           />
         </div>
         <div className="col-12 d-flex flex-column gap-1 mb-3">
-          <label htmlFor="qeyd">Qeyd*</label>
+          <label htmlFor="qeyd">{t("flow_qeyd_label")}</label>
           <input
             type="text"
             className="form-control"
@@ -317,7 +330,7 @@ const StaticForm = () => {
         </div>
         {validateStatusAndCancel && (
           <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
-            <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
+            <label htmlFor="statusQeyd">{t("flow_status_qeydi_label")}</label>
             <input
               type="text"
               className={
@@ -326,7 +339,7 @@ const StaticForm = () => {
               id="statusQeyd"
               name="statusQeyd"
               {...register("statusQeyd", {
-                required: "Sənəd üzrə status qeydi boş ola bilməz!",
+                required: t("flow_status_qeydi_error"),
               })}
             />
             {errors.statusQeyd && (
@@ -336,19 +349,19 @@ const StaticForm = () => {
         )}
         {validateStatusAndCancel && (
           <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
-            <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
+            <label htmlFor="legvSebebi">{t("flow_legv_sebebi_label")}</label>
             <Controller
               name="legvSebebi"
               id="legvSebebi"
               control={control}
               rules={{
-                required: "Ləğv səbəbi boş ola bilməz!",
+                required: t("flow_legv_sebebi_error"),
               }}
               render={({ field }) => (
                 <Select
                   {...field}
                   options={cancelListOption}
-                  placeholder="Select type:"
+                  placeholder={t("flow_select_placeholder")}
                   className={
                     errors.legvSebebi
                       ? "basic-multi-select error-border"

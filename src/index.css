@@ -112,3 +112,17 @@
 .sidebar-child-item-button {
   padding: 8px 16px 8px 32px!important;
 } 
+
+.language-selector {
+  background: transparent;
+  border: 2px solid #fff;
+  height: 25px;
+  border-radius: 4px;
+  color: #fff;
+  outline: none;
+}
+
+.language-selector option {
+  background: #a299ae;
+  color: #fff;
+}

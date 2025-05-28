@@ -1,0 +1,22 @@
+{
+    "register_title": "Yeni Hesab Yarat",
+    "register_username_label": "İstifadəçi adı",
+    "register_username_placeholeder": "İstifadəçi adınızı daxil edin",
+    "register_password_label": "Şifrə",
+    "register_password_placeholder": "Şifrənizi daxil edin",
+    "register_email_label": "E-poçt",
+    "register_email_placeholder": "E-poçtunuzu daxil edin",
+    "register_email2_label": "E-poçt2",
+    "register_email2_placeholder": "İkinci e-poçtunuzu daxil edin",
+    "register_firstname_label": "Ad",
+    "register_firstname_placeholder": "Adınızı daxil edin",
+    "register_surname_label": "Soyad",
+    "register_surname_placeholder": "Soyadınızı daxil edin",
+    "register_phone_label": "Telefon",
+    "register_phone_placeholder": "Telefon nömrənizi daxil edin",
+    "register_phone2_label": "Telefon2",
+    "register_phone2_placeholder": "İkinci telefon nömrənizi daxil edin",
+    "register_have_account": "Hesabınız var?",
+    "register_login": "Daxil ol",
+    "register_button": "Qeydiyyatdan keç"
+}

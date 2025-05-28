@@ -1,10 +1,12 @@
 import { DataGrid } from '@mui/x-data-grid';
 import { Play } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 
 export default function StartedFlowsTable() {
   const smetaData = useSelector(state => state.flowSliceReducer.smetaData);
+  const { t } = useTranslation("flows");
   console.log(smetaData);
   
   const rows = [
@@ -36,11 +38,11 @@ export default function StartedFlowsTable() {
     <div style={{ height: 'auto', width: '100%' }}>
       <div className="card pb-5 pt-4 px-4">
         <div className='d-flex align-items-center justify-content-between mb-4 mt-2'>
-          <h3>Tüm Akışlar</h3>
+          <h3>{t("all_flows")}</h3>
           <div className='d-flex justify-content-end align-items-center'>
             <Link to="/flows/start" className='start-flow-button d-flex align-items-center btn btn-primary gap-1'>
               <Play width={16} color='#fff' />
-              Başlat
+              {t("flow_start")}
             </Link>
           </div>
         </div>

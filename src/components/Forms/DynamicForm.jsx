@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Select from "react-select";
 import AddSolutionTable from "../Tables/AddSolutionTable";
 import AddSmetaDesignTable from "../Tables/AddSmetaDesignTable";
@@ -8,6 +8,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
 import { FormDataSliceActions } from "../../store/formData-slice";
 import { FlowSliceAction } from "../../store/flow-slice";
+import { useTranslation } from "react-i18next";
 
 const DynamicForm = ({ nextStep, currentStep }) => {
   const [openSolutionModal, setOpenSolutionModal] = useState(false);
@@ -20,6 +21,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const formDatas = useSelector((state) => state.formDataReducer.formDatas);
   const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
   const designItems = useSelector((state) => state.formDataReducer.designItems);
+  const { i18n, t } = useTranslation("flows");
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -38,6 +40,17 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const handleCloseSmetaDesignModal = useCallback(() => {
     setOpenSmetaDesignModal(false);
   }, []);
+
+  useEffect(() => {
+    const subscription = i18n.on("languageChanged", () => {
+      clearErrors();
+      setValidateStatusAndCancel(false);
+    });
+
+    return () => {
+      i18n.off("languageChanged", subscription);
+    };
+  }, [clearErrors, i18n]);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -64,13 +77,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
   const handleAddSolutionClick = async () => {
     setValidateStatusAndCancel(false);
     clearErrors(["statusQeyd", "legvSebebi"]);
-    await trigger([
-      "musteriAdi",
-      "icraTarixi",
-      "layiheAdi",
-      "musteriNovu",
-      "layiheMeneceri",
-    ]);
+    await trigger(["musteriAdi","icraTarixi","layiheAdi","musteriNovu","layiheMeneceri"]);
   };
 
   const handleCancelClick = async () => {
@@ -90,12 +97,20 @@ const DynamicForm = ({ nextStep, currentStep }) => {
       <div className="card p-4">
         <div className="row">
           <div className="d-flex justify-content-end align-items-center gap-2 my-2">
-            <button type="submit" className="btn btn-primary py-2" onClick={handleAddSolutionClick}>
-              {nextStep === "smeta-dizayn-formu" && "Həlləri əlavə et"}
-              {nextStep === "smetaya-gonder-formu" && "Smeta dizayn göndər"}
-              {nextStep === "islere-start-ver-formu" && "Smetaya göndər"}
-              {nextStep === "prosesi-tamamla-formu" && "İşlərə start ver"}
-              {nextStep === "/flows" && "Prosesi tamamla"}
+            <button
+              type="submit"
+              className="btn btn-primary py-2"
+              onClick={handleAddSolutionClick}
+            >
+              {nextStep === "smeta-dizayn-formu" &&
+                t("flow_add_solution_button")}
+              {nextStep === "smetaya-gonder-formu" &&
+                t("flow_add_smeta_design_button")}
+              {nextStep === "islere-start-ver-formu" &&
+                t("flow_add_smeta_button")}
+              {nextStep === "prosesi-tamamla-formu" &&
+                t("flow_start_work_button")}
+              {nextStep === "/flows" && t("flow_complete_process_button")}
             </button>
 
             <button
@@ -103,11 +118,13 @@ const DynamicForm = ({ nextStep, currentStep }) => {
               className="btn btn-danger py-2"
               onClick={handleCancelClick}
             >
-              Ləğv et
+              {t("flow_table_cancel_button")}
             </button>
           </div>
           <div className="col-12 col-lg-8 d-flex flex-column mb-3">
-            <label htmlFor="sorguNomresi">Sorğu nömrəsi*</label>
+            <label htmlFor="sorguNomresi">
+              {t("flows_sorgu_nomresi_label")}
+            </label>
             <input
               type="text"
               className="form-control"
@@ -119,7 +136,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-4 d-flex flex-column mb-3">
-            <label htmlFor="tarix">Tarix*</label>
+            <label htmlFor="tarix">{t("flows_tarix_label")}</label>
             <input
               type="date"
               className="form-control"
@@ -131,9 +148,9 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-8 d-flex flex-column mb-3">
-            <label htmlFor="musteriAdi">Müştəri adı*</label>
+            <label htmlFor="musteriAdi">{t("flows_musteri_adi_label")}</label>
             <Select
-              placeholder="Select type:"
+              placeholder={t("flow_select_placeholder")}
               className="basic-multi-select"
               classNamePrefix="select"
               readOnly
@@ -142,7 +159,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-4 d-flex flex-column mb-3">
-            <label htmlFor="icraTarixi">İcra tarixi*</label>
+            <label htmlFor="icraTarixi">{t("flows_icra_tarixi_label")}</label>
             <input
               type="date"
               id="icraTarixi"
@@ -154,9 +171,9 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-8 d-flex flex-column mb-3">
-            <label htmlFor="layiheAdi">Layihə adı*</label>
+            <label htmlFor="layiheAdi">{t("flow_layihe_adi_label")}</label>
             <Select
-              placeholder="Select type:"
+              placeholder={t("flow_select_placeholder")}
               className="basic-multi-select"
               classNamePrefix="select"
               readOnly
@@ -165,9 +182,9 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-4 d-flex flex-column mb-3">
-            <label htmlFor="musteriNovu">Müştəri növü*</label>
+            <label htmlFor="musteriNovu">{t("flow_musteri_novu_label")}</label>
             <Select
-              placeholder="Select type:"
+              placeholder={t("flow_select_placeholder")}
               className="basic-multi-select"
               classNamePrefix="select"
               readOnly
@@ -176,9 +193,11 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-8 d-flex flex-column mb-3">
-            <label htmlFor="layiheMeneceri">Layihə meneceri*</label>
+            <label htmlFor="layiheMeneceri">
+              {t("flow_layihe_meneceri_label")}
+            </label>
             <Select
-              placeholder="Select type:"
+              placeholder={t("flow_select_placeholder")}
               className="basic-multi-select"
               classNamePrefix="select"
               readOnly
@@ -187,7 +206,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-4 d-flex flex-column mb-3">
-            <label htmlFor="elaqeliSexs">Əlaqəli şəxs*</label>
+            <label htmlFor="elaqeliSexs">{t("flow_elaqeli_sexs_label")}</label>
             <input
               type="text"
               className="form-control"
@@ -199,7 +218,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-8 d-flex flex-column mb-3">
-            <label htmlFor="email">Email*</label>
+            <label htmlFor="email">{t("flow_email_label")}</label>
             <input
               type="email"
               id="email"
@@ -211,7 +230,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 col-lg-4 d-flex flex-column mb-3">
-            <label htmlFor="telNomresi">Telefon nömrəsi*</label>
+            <label htmlFor="telNomresi">{t("flow_telefon_label")}</label>
             <input
               type="text"
               className="form-control"
@@ -223,7 +242,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
             />
           </div>
           <div className="col-12 d-flex flex-column mb-3">
-            <label htmlFor="qeyd">Qeyd*</label>
+            <label htmlFor="qeyd">{t("flow_qeyd_label")}</label>
             <input
               type="text"
               className="form-control"
@@ -236,16 +255,18 @@ const DynamicForm = ({ nextStep, currentStep }) => {
           </div>
           {validateStatusAndCancel && (
             <div className="col-12 col-lg-8 d-flex flex-column gap-1 mb-5">
-              <label htmlFor="statusQeyd">Sənəd üzrə status qeydi*</label>
+              <label htmlFor="statusQeyd">{t("flow_status_qeydi_label")}</label>
               <input
                 type="text"
                 className={
-                  errors.statusQeyd ? "form-control error-border" : "form-control"
+                  errors.statusQeyd
+                    ? "form-control error-border"
+                    : "form-control"
                 }
                 id="statusQeyd"
                 name="statusQeyd"
                 {...register("statusQeyd", {
-                  required: "Sənəd üzrə status qeydi boş ola bilməz!",
+                  required: t("flow_status_qeydi_error"),
                 })}
               />
               {errors.statusQeyd && (
@@ -253,28 +274,31 @@ const DynamicForm = ({ nextStep, currentStep }) => {
               )}
             </div>
           )}
+
           {validateStatusAndCancel && (
             <div className="col-12 col-lg-4 d-flex flex-column gap-1 mb-5">
-              <label htmlFor="legvSebebi">Ləgv səbəbi*</label>
+              <label htmlFor="legvSebebi">{t("flow_legv_sebebi_label")}</label>
               <Controller
                 name="legvSebebi"
                 id="legvSebebi"
                 control={control}
                 rules={{
-                  required: "Ləğv səbəbi boş ola bilməz!",
+                  required: t("flow_legv_sebebi_error"),
                 }}
                 render={({ field }) => (
                   <Select
                     {...field}
                     options={cancelListOption}
-                    placeholder="Select type:"
+                    placeholder={t("flow_select_placeholder")}
                     className={
                       errors.legvSebebi
                         ? "basic-multi-select error-border"
                         : "basic-multi-select"
                     }
                     classNamePrefix="select"
-                    onChange={(selectedOption) => field.onChange(selectedOption)}
+                    onChange={(selectedOption) =>
+                      field.onChange(selectedOption)
+                    }
                   />
                 )}
               />
@@ -285,7 +309,7 @@ const DynamicForm = ({ nextStep, currentStep }) => {
           )}
         </div>
       </div>
-      
+
       {(currentStep === "islere-start-ver-formu" ||
         currentStep === "prosesi-tamamla-formu") && <RevisionTable />}
       {(currentStep === "smeta-dizayn-formu" ||

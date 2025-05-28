@@ -2,10 +2,12 @@ import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import axios from "../api/axios";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Login = () => {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const [errorMsg,setErrorMsg] = useState("");
+  const { t } = useTranslation('login');
 
   const onSubmit = async (data) => {
     try {        
@@ -42,7 +44,7 @@ const Login = () => {
                 <div className="card-body">
                   <div className="m-sm-4">
                     <div className="text-center mb-3">
-                      <h2>Giriş</h2>
+                      <h2>{t('login_title')}</h2>
                     </div>
 
                     {errorMsg && (
@@ -53,12 +55,12 @@ const Login = () => {
 
                     <form onSubmit={handleSubmit(onSubmit)}>
                       <div className="mb-3">
-                        <label>Kullanıcı Adı</label>
+                        <label>{t("login_username_label")}</label>
                         <input
                           className="form-control form-control-lg"
                           type="text"
-                          {...register("username", { required: "Kullanıcı adı gerekli" })}
-                          placeholder="Kullanıcı adınızı giriniz"
+                          {...register("username", { required: t("login_username_error") })}
+                          placeholder={t("login_username_placeholder")}
                         />
                         {errors.username && (
                           <span className="text-danger">{errors.username.message}</span>
@@ -66,12 +68,12 @@ const Login = () => {
                       </div>
 
                       <div className="mb-3">
-                        <label>Şifre</label>
+                        <label>{t("login_password_label")}</label>
                         <input
                           className="form-control form-control-lg"
                           type="password"
-                          {...register("password", { required: "Şifre gerekli" })}
-                          placeholder="Şifrenizi giriniz"
+                          {...register("password", { required: t("login_password_error") })}
+                          placeholder={t("login_password_placeholder")}
                         />
                         {errors.password && (
                           <span className="text-danger">{errors.password.message}</span>
@@ -79,13 +81,13 @@ const Login = () => {
                       </div>
 
                       <div className="d-flex justify-content-between mt-3">
-                        <span className="text-small">Hesabınız yok mu? </span>
-                        <Link to="/register">Kayıt ol</Link>
+                        <span className="text-small">{t("login_dont_have_account")} </span>
+                        <Link to="/register">{t("login_register")}</Link>
                       </div>
 
                       <div className="d-flex justify-content-center mt-3">
                         <button type="submit" className="btn btn-primary py-2 px-3">
-                          Giriş yap
+                          {t('login_button')}
                         </button>
                       </div>
                     </form>

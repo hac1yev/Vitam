@@ -1,0 +1,22 @@
+{
+    "register_title": "Create New Account",
+    "register_username_label": "Username",
+    "register_username_placeholeder": "Enter your username",
+    "register_password_label": "Password",
+    "register_password_placeholder": "Enter your password",
+    "register_email_label": "Email",
+    "register_email_placeholder": "Enter your email",
+    "register_email2_label": "Email 2",
+    "register_email2_placeholder": "Enter your secondary email",
+    "register_firstname_label": "First Name",
+    "register_firstname_placeholder": "Enter your first name",
+    "register_surname_label": "Last Name",
+    "register_surname_placeholder": "Enter your last name",
+    "register_phone_label": "Phone",
+    "register_phone_placeholder": "Enter your phone number",
+    "register_phone2_label": "Phone 2",
+    "register_phone2_placeholder": "Enter your secondary phone number",
+    "register_have_account": "Already have an account?",
+    "register_login": "Login",
+    "register_button": "Register"
+}

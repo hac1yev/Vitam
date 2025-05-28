@@ -3,6 +3,8 @@ import Modal from "@mui/material/Modal";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { FormDataSliceActions } from "../../store/formData-slice";
+import { useTranslation } from "react-i18next";
+import { useEffect } from "react";
 
 const style = {
   position: "absolute",
@@ -18,14 +20,31 @@ const style = {
 };
 
 export default function AddSmetaDesign({ handleClose, open }) {
-  const { register, handleSubmit, reset, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    clearErrors,
+    formState: { errors },
+  } = useForm();
   const dispatch = useDispatch();
+  const { i18n,t } = useTranslation('flows'); 
 
   const handleSmetaDesignModalSubmit = (data) => {
     dispatch(FormDataSliceActions.getDesignItems(data));
     reset();
     handleClose();
   };
+
+  useEffect(() => {
+     const subscription = i18n.on('languageChanged', () => {
+        clearErrors()  
+      });
+
+      return () => {
+        i18n.off('languageChanged', subscription);
+      };
+  }, [clearErrors, i18n]);
 
   return (
     <div>
@@ -37,39 +56,52 @@ export default function AddSmetaDesign({ handleClose, open }) {
       >
         <Box sx={style}>
           <div className="row">
-            <h3 className="mb-4">Smeta dizayn əlavə et</h3>
+            <h3 className="mb-4">{t("flow_table_add_design")}</h3>
+
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="fileUrl">Fayl linki*</label>
+              <label htmlFor="fileUrl">{t("flow_design_table_col1")}*</label>
               <input
                 type="url"
-                className={errors.fileUrl ? "form-control error-border" : "form-control"}
+                className={
+                  errors.fileUrl ? "form-control error-border" : "form-control"
+                }
                 id="fileUrl"
                 name="fileUrl"
-                {...register("fileUrl", { required: "Fayl linki boş ola bilməz" })}
+                {...register("fileUrl", {
+                  required: t("flow_design_col1_error"),
+                })}
               />
               {errors.fileUrl && (
                 <p className="error-text">{errors.fileUrl.message}</p>
               )}
             </div>
+
             <div className="col-sm-6 d-flex flex-column gap-1 mb-3">
-              <label htmlFor="fileTitle">Fayl başlığı*</label>
+              <label htmlFor="fileTitle">{t("flow_design_table_col2")}*</label>
               <input
                 type="text"
-                className={errors.fileTitle ? "form-control error-border" : "form-control"}
+                className={
+                  errors.fileTitle
+                    ? "form-control error-border"
+                    : "form-control"
+                }
                 id="fileTitle"
                 name="fileTitle"
-                {...register("fileTitle", { required: 'Fayl başlığı boş ola bilməz' })}
+                {...register("fileTitle", {
+                  required: t("flow_design_col2_error"),
+                })}
               />
               {errors.fileTitle && (
                 <p className="error-text">{errors.fileTitle.message}</p>
               )}
             </div>
+
             <div className="d-flex justify-content-end gap-2 mt-2">
               <button
                 className="btn btn-primary"
                 onClick={handleSubmit(handleSmetaDesignModalSubmit)}
               >
-                Əlavə et
+                {t("flow_table_add_button")}
               </button>
               <button
                 type="button"
@@ -77,7 +109,7 @@ export default function AddSmetaDesign({ handleClose, open }) {
                 className="btn btn-outline-light"
                 style={{ color: "#666", border: "1px solid #666" }}
               >
-                Ləğv et
+                {t("flow_table_cancel_button")}
               </button>
             </div>
           </div>

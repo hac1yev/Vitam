@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "flows": {
+      "title": "Axışlar",
+      "vitam": "Vitam Sorğu (AZ)"
+    },
+    "reports": {
+      "title": "Hesabatlar",
+      "daily": "Günlük hesabat",
+      "monthly": "Aylıq hesabat"
+    },
+    "management": {
+      "title": "Admin əməliyyatları",
+      "userSettings": "İstifadəçi parametrləri"
+    },
+    "home": "Ana səhifə"
+  }
+}

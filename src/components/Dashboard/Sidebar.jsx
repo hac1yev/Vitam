@@ -1,22 +1,18 @@
-import { HomeIcon, House } from "lucide-react";
+import { HomeIcon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { sidebarMenuLinks } from "../../demo/sidebarLinks";
 import { useSelector } from "react-redux";
 import logo from "../../assets/logo.png";
-import ListSubheader from "@mui/material/ListSubheader";
 import List from "@mui/material/List";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Collapse from "@mui/material/Collapse";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
-import DraftsIcon from "@mui/icons-material/Drafts";
-import SendIcon from "@mui/icons-material/Send";
 import ExpandLess from "@mui/icons-material/ExpandLess";
 import ExpandMore from "@mui/icons-material/ExpandMore";
-import StarBorder from "@mui/icons-material/StarBorder";
 import { Box } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const Sidebar = () => {
   const isOpenSidebar = useSelector(
@@ -24,15 +20,16 @@ const Sidebar = () => {
   );
   const [open, setOpen] = useState("");
   const [selectedMenuItem, setSelectedMenuItem] = useState("as1");
+  const { t } = useTranslation("sidebar");
 
   const handleListItemClick = (event, id) => {
     setSelectedMenuItem(id);
   };
 
   const handleClick = (id) => {
-    if(id === open) {
+    if (id === open) {
       setOpen("");
-    }else{
+    } else {
       setOpen(id);
     }
   };
@@ -48,42 +45,58 @@ const Sidebar = () => {
           sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
           component="nav"
         >
-          <Link
-            to={"/"}
-            className="sidebar-item"
-          >
-            <ListItemButton 
+          <Link to={"/"} className="sidebar-item">
+            <ListItemButton
               selected={selectedMenuItem === "as1"}
               onClick={(event) => handleListItemClick(event, "as1")}
             >
               <ListItemIcon>
-              <HomeIcon width={18} /> 
-            </ListItemIcon>
-            <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary="Ana Sayfa" />
+                <HomeIcon width={18} />
+              </ListItemIcon>
+              <ListItemText
+                slotProps={{ primary: { fontSize: "15px" } }}
+                primary={t("sidebar.home")}
+              />
             </ListItemButton>
           </Link>
           {sidebarMenuLinks.map((link) => (
             <Box key={link.id}>
-              <ListItemButton onClick={handleClick.bind(null, link.id)} className="list-item-button">
+              <ListItemButton
+                onClick={handleClick.bind(null, link.id)}
+                className="list-item-button"
+              >
                 <ListItemIcon>
                   <link.icon width={18} />
                 </ListItemIcon>
-                <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary={link.title} />
+                <ListItemText
+                  slotProps={{ primary: { fontSize: "15px" } }}
+                  primary={t(link.title)}
+                />
                 {open === link.id ? <ExpandLess /> : <ExpandMore />}
               </ListItemButton>
               <Collapse in={link.id === open} timeout={300} unmountOnExit>
                 <List component="div" disablePadding>
                   {link.children.map((child) => (
-                    <Link to={child.to} sx={{ pl: 4 }} key={child.id} className="sidebar-child-item">
-                      <ListItemButton 
+                    <Link
+                      to={child.to}
+                      sx={{ pl: 4 }}
+                      key={child.id}
+                      className="sidebar-child-item"
+                    >
+                      <ListItemButton
                         selected={selectedMenuItem === child.id}
-                        onClick={(event) => handleListItemClick(event, child.id)}
+                        onClick={(event) =>
+                          handleListItemClick(event, child.id)
+                        }
                         className="sidebar-child-item-button"
                       >
                         <ListItemIcon>
                           <child.icon width={18} />
                         </ListItemIcon>
-                        <ListItemText slotProps={{ primary: { fontSize: '15px' } }} primary={child.label} />
+                        <ListItemText
+                          slotProps={{ primary: { fontSize: "15px" } }}
+                          primary={t(child.label)}
+                        />
                       </ListItemButton>
                     </Link>
                   ))}

@@ -5,14 +5,22 @@ import { Pencil, Trash2 } from "lucide-react";
 import { useCallback, useState } from "react";
 import EditSolution from "../Modals/EditSolution";
 import { FormDataSliceActions } from "../../store/formData-slice";
+import { useTranslation } from "react-i18next";
 
-const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, openSolutionModal }) => {
-  const solutionItems = useSelector((state) => state.formDataReducer.solutionItems);
+const AddSolutionTable = ({
+  handleOpenSolutionModal,
+  handleCloseSolutionModal,
+  openSolutionModal,
+}) => {
+  const solutionItems = useSelector(
+    (state) => state.formDataReducer.solutionItems
+  );
   const [searchParams] = useSearchParams();
   const step = searchParams.get("step");
-  const [openEditSolutionModal,setOpenEditSolutionModal] = useState(false);
-  const [itemToEdit,setItemToEdit] = useState(null);
+  const [openEditSolutionModal, setOpenEditSolutionModal] = useState(false);
+  const [itemToEdit, setItemToEdit] = useState(null);
   const dispatch = useDispatch();
+  const { t } = useTranslation("flows");
 
   const handleCloseSolutionEditModal = useCallback(() => {
     setOpenEditSolutionModal(false);
@@ -23,14 +31,16 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
     setItemToEdit(item);
   };
 
-  const handleDeleteItem = (id) => {        
+  const handleDeleteItem = (id) => {
     dispatch(FormDataSliceActions.deleteSolutionItem({ id }));
-  }
+  };
 
   return (
     <>
       <div className="col-12 my-3">
-        {solutionItems.length === 0 && <p className="error-text mb-2">Həll əlavə olunmalıdır!</p>}
+        {solutionItems.length === 0 && (
+          <p className="error-text mb-2">{t("flow_solution_required")}</p>
+        )}
         <div className="card">
           <div className="card-body">
             {step === "smeta-dizayn-formu" && (
@@ -39,7 +49,7 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
                 className="btn btn-primary"
                 onClick={handleOpenSolutionModal}
               >
-                Ekle
+                {t("flow_table_add_button")}
               </button>
             )}
             <table
@@ -49,13 +59,13 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
             >
               <thead>
                 <tr>
-                  <th>Həll adı</th>
-                  <th>Bölgə</th>
-                  <th>Ölçü vahidi</th>
-                  <th>Miqdar</th>
-                  <th>Çatdırılma tarixi</th>
-                  <th>Qeyd</th>
-                  {step === 'smeta-dizayn-formu' && <th></th>}
+                  <th>{t("flow_solution_table_col1")}</th>
+                  <th>{t("flow_solution_table_col2")}</th>
+                  <th>{t("flow_solution_table_col3")}</th>
+                  <th>{t("flow_solution_table_col4")}</th>
+                  <th>{t("flow_solution_table_col5")}</th>
+                  <th>{t("flow_solution_table_col6")}</th>
+                  {step === "smeta-dizayn-formu" && <th></th>}
                 </tr>
               </thead>
               <tbody>
@@ -68,28 +78,33 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
                       <td>{solution.miqdar}</td>
                       <td>{solution.deadline}</td>
                       <td>{solution.qeyd}</td>
-                      {step === 'smeta-dizayn-formu' && <td className="d-flex align-items-center justify-content-center gap-1">
-                        <button 
-                          onClick={handleEditItem.bind(null, solution)} 
-                          className="btn btn-warning px-2"
-                          type="button" 
-                        >
-                          <Pencil width={20} />
-                        </button>
-                        <button 
-                          onClick={handleDeleteItem.bind(null, solution.hell.value)}
-                          className="btn btn-danger px-2"
-                          type="button" 
-                        >
-                          <Trash2 width={20} />
-                        </button>
-                      </td>}
+                      {step === "smeta-dizayn-formu" && (
+                        <td className="d-flex align-items-center justify-content-center gap-1">
+                          <button
+                            onClick={handleEditItem.bind(null, solution)}
+                            className="btn btn-warning px-2"
+                            type="button"
+                          >
+                            <Pencil width={20} />
+                          </button>
+                          <button
+                            onClick={handleDeleteItem.bind(
+                              null,
+                              solution.hell.value
+                            )}
+                            className="btn btn-danger px-2"
+                            type="button"
+                          >
+                            <Trash2 width={20} />
+                          </button>
+                        </td>
+                      )}
                     </tr>
                   ))
                 ) : (
                   <tr>
                     <td colSpan="7" className="text-center text-muted">
-                      Həll əlavə olunmayıb!
+                      {t("flow_solution_no_row")}
                     </td>
                   </tr>
                 )}
@@ -98,15 +113,19 @@ const AddSolutionTable = ({ handleOpenSolutionModal, handleCloseSolutionModal, o
           </div>
         </div>
       </div>
-      {openSolutionModal && <AddSolution
-        handleClose={handleCloseSolutionModal}
-        open={openSolutionModal}
-      />}
-      {openEditSolutionModal && <EditSolution
-        handleClose={handleCloseSolutionEditModal}
-        open={openEditSolutionModal}
-        itemToEdit={itemToEdit}
-      />}
+      {openSolutionModal && (
+        <AddSolution
+          handleClose={handleCloseSolutionModal}
+          open={openSolutionModal}
+        />
+      )}
+      {openEditSolutionModal && (
+        <EditSolution
+          handleClose={handleCloseSolutionEditModal}
+          open={openEditSolutionModal}
+          itemToEdit={itemToEdit}
+        />
+      )}
     </>
   );
 };

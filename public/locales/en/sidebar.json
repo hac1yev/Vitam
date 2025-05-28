@@ -1,0 +1,18 @@
+{
+  "sidebar": {
+    "flows": {
+      "title": "Flows",
+      "vitam": "Vitam Request (AZ)"
+    },
+    "reports": {
+      "title": "Reports",
+      "daily": "Daily report",
+      "monthly": "Monthly report"
+    },
+    "management": {
+      "title": "Admin operations",
+      "userSettings": "User settings"
+    },
+    "home": "Homepage"
+  }
+}
